@@ -1,8 +1,13 @@
 //
-//  TrackerCategoryModel.swift
+//  TrackerCategory.swift
 //  Tracker
 //
-//  Created by Doroteya Galbacheva on 25.08.2024.
+//  Created by Doroteya Galbacheva on 23.08.2024.
 //
 
-import Foundation
+import UIKit
+
+struct TrackerCategory {
+    let title: String
+    let trackers: [Tracker]
+}
