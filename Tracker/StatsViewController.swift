@@ -2,7 +2,17 @@
 //  StatsViewController.swift
 //  Tracker
 //
-//  Created by Doroteya Galbacheva on 25.08.2024.
+//  Created by Doroteya Galbacheva on 15.08.2024.
 //
 
-import Foundation
+//MARK: - Statisctics Screen
+
+import UIKit
+
+final class StatsViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .whiteDay
+    }
+}
