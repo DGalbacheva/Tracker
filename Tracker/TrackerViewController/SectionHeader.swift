@@ -9,7 +9,7 @@ import UIKit
 
 //Create a class for the section header
 final class SectionHeader: UICollectionReusableView {
-    var titleLabel: UILabel!
+    lazy var titleLabel = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,8 +19,9 @@ final class SectionHeader: UICollectionReusableView {
         addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 28),
-            titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 24),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)
         ])
     }
     required init?(coder: NSCoder) {

@@ -9,22 +9,11 @@
 
 import UIKit
 
-protocol TrackerCellDelegate: AnyObject {
-    func completeTracker(id: UUID, at indexPath: IndexPath)
-    func uncompleteTracker(id: UUID, at indexPath: IndexPath)
-}
-
 final class TrackerCollectionViewCell: UICollectionViewCell {
-    //Declare a delegate for handling a cell button click
-    weak var delegate: TrackerCellDelegate?
     
-    //Property for saving tracker status (completed / not completed)
+    weak var delegate: TrackerCollectionViewCellDelegate?
     private var isCompletedToday: Bool = false
-    
-    //Property for saving tracker ID
-    private var trackerId: UUID?
-    
-    //Setting up a property for use in the configure() method
+    private var trackerId: UUID? = nil
     private var indexPath: IndexPath?
     
     //MARK: - UI Elements
@@ -110,21 +99,25 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     // Метод для "собирания" ячейки
     func configure(
-        with tracker: Tracker,
-        isCompletedToday: Bool,
+        id:  UUID,
+        title:  String,
+        color: UIColor,
+        emoji: String,
         completedDays: Int,
+        isEnabled: Bool,
+        isCompletedToday: Bool,
         indexPath: IndexPath
     ) {
-        self.trackerId = tracker.id
+        self.trackerId = id
         self.isCompletedToday = isCompletedToday
         self.indexPath = indexPath
         
-        let color = tracker.color
+        let color = color
         
         upperView.backgroundColor = color
         plusButton.tintColor = color
-        trackerText.text = tracker.title
-        emojiLabel.text = tracker.emoji
+        trackerText.text = title
+        emojiLabel.text = emoji
         
         let wordDay = pluralizeDays(completedDays)
         dayCountLabel.text = "\(wordDay)"
@@ -148,7 +141,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     // Отслеживаем нажатие на кнопку под трекером
-    @objc private func plusButtonTapped() {
+ /*   @objc private func plusButtonTapped() {
         guard let trackerId = trackerId, let indexPath = indexPath else {
             return }
         
@@ -157,6 +150,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         } else {
             delegate?.completeTracker(id: trackerId, at: indexPath)
         }
+    } */
+    
+    @objc private func plusButtonTapped() {
+        delegate?.buttonTapped(in: self)
     }
     
     
