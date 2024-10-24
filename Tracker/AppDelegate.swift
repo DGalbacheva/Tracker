@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Tracker
 //
-//  Created by Doroteya Galbacheva on 25.08.2024.
+//  Created by Doroteya Galbacheva on 08.08.2024.
 //
 
 import UIKit
@@ -33,4 +33,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-
