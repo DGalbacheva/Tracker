@@ -21,6 +21,8 @@ final class HabitOrEventViewController: UIViewController {
     var trackerType: TrackerType = .habit
     var weekDaysArrayForTracker: [WeekDay] = []
     var textFieldIsEmpty: Bool = true
+    var trackerColor: UIColor?
+    var trackerEmoji: String?
     var categoryForTracker: String = ""
     var weekdaysForTracker: String {
         var string: String = ""
@@ -29,6 +31,14 @@ final class HabitOrEventViewController: UIViewController {
         }
         return string
     }
+    
+    private let emojis = DataForHabitAndTracker.shared.emojis
+    private let colors = DataForHabitAndTracker.shared.colors
+    
+    private var selectedEmojiIndexPath: IndexPath?
+    private var selectedColorIndexPath: IndexPath?
+    
+    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     private lazy var titleLabel = UILabel()
     private lazy var nameTrackerTextField = UITextField()
@@ -73,6 +83,12 @@ final class HabitOrEventViewController: UIViewController {
         trackerTableView.layer.cornerRadius = 16
         trackerTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(HabitOrEventCollectionViewCell.self, forCellWithReuseIdentifier: HabitOrEventCollectionViewCell.identifier)
+        collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        collectionView.allowsMultipleSelection = false
+        
         createButton.setTitle("Создать", for: .normal)
         createButton.tintColor = .whiteDay
         createButton.backgroundColor = .ypGray
@@ -93,12 +109,14 @@ final class HabitOrEventViewController: UIViewController {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         nameTrackerTextField.translatesAutoresizingMaskIntoConstraints = false
         trackerTableView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         createButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(titleLabel)
         view.addSubview(nameTrackerTextField)
         view.addSubview(trackerTableView)
+        view.addSubview(collectionView)
         view.addSubview(createButton)
         view.addSubview(cancelButton)
         
@@ -117,6 +135,11 @@ final class HabitOrEventViewController: UIViewController {
             trackerTableView.topAnchor.constraint(equalTo: nameTrackerTextField.bottomAnchor, constant: 24),
             trackerTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             trackerTableView.heightAnchor.constraint(equalToConstant: trackerType == .habit ? 150 : 75),
+            
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 1),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: trackerTableView.bottomAnchor, constant: 50),
+            collectionView.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -16),
             
             cancelButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -143,20 +166,21 @@ final class HabitOrEventViewController: UIViewController {
     
     @objc private func createButtonIsClicked() {
         dismiss(animated: true)
+        guard let color = trackerColor, let emoji = trackerEmoji else { return }
         var tracker: Tracker
         if let text = nameTrackerTextField.text {
             if trackerType == .habit {
-                tracker = Tracker(id: UUID(), title: text, color: .colorSet4, emoji: "🍄", schedule: weekDaysArrayForTracker)
+                tracker = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: weekDaysArrayForTracker)
             } else {
                 weekDaysArrayForTracker = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
-                tracker = Tracker(id: UUID(), title: text, color: .colorSet4, emoji: "🍄", schedule: weekDaysArrayForTracker)
+                tracker = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: weekDaysArrayForTracker)
             }
             delegate?.didCreateTracker(category: categoryForTracker, tracker: tracker)
         }
     }
     
     internal func updateCreateButtonState() {
-        if textFieldIsEmpty == false, (trackerType == .event || !weekDaysArrayForTracker.isEmpty), !categoryForTracker.isEmpty {
+        if textFieldIsEmpty == false, (trackerType == .event || !weekDaysArrayForTracker.isEmpty), !categoryForTracker.isEmpty, trackerColor != nil, trackerEmoji != nil {
             createButton.isEnabled = true
             createButton.backgroundColor = .blackDay
         } else {
@@ -189,7 +213,7 @@ extension HabitOrEventViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: HabitOrEventTableViewСеll.identifier, for: indexPath) as? HabitOrEventTableViewСеll else {
-            assertionFailure("Не удалось выполнить приведение к EventAndHabitTableViewСеll")
+            assertionFailure("Failed to cast to EventOrHabitTableViewСеll")
             return UITableViewCell()
         }
         let text = rowsForTableView[indexPath.row]
@@ -205,6 +229,136 @@ extension HabitOrEventViewController: UITableViewDataSource {
         }
         cell.backgroundColor = .backgroundDay
         return cell
+    }
+}
+
+extension HabitOrEventViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        2
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0 {
+            return emojis.count
+        } else if section == 1 {
+            return colors.count
+        }
+        return 0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HabitOrEventCollectionViewCell.identifier, for: indexPath) as? HabitOrEventCollectionViewCell
+        else {
+            print("Failed to cast to HabitOrEventCollectionViewCell")
+            return UICollectionViewCell()
+        }
+
+        cell.reset()
+        if indexPath.section == 0 {
+            cell.configEmojiCell(emoji: emojis[indexPath.row])
+
+            if indexPath == selectedEmojiIndexPath {
+                cell.selectEmoji()
+            } else {
+                cell.deselectEmoji()
+            }
+
+        } else if indexPath.section == 1 {
+            cell.configColorCell(color: colors[indexPath.row])
+            if indexPath == selectedColorIndexPath {
+                let colorForBorder = colors[indexPath.row].withAlphaComponent(0.3)
+                cell.selectColor(color: colorForBorder)
+            } else {
+                cell.deselectColor()
+            }
+        }
+        return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        var id: String
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            id = "header"
+        case UICollectionView.elementKindSectionFooter:
+            id = "footer"
+        default:
+            id = ""
+        }
+
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? SectionHeader else {
+            assertionFailure("Failed to cast to SectionHeader")
+            return UICollectionReusableView()
+        }
+        if indexPath.section == 0 {
+            view.titleLabel.text = "Emoji"
+        } else {
+            view.titleLabel.text = "Цвет"
+        }
+        return view
+    }
+}
+
+//MARK: UICollectionViewDelegateFlowLayout
+extension HabitOrEventViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 52, height: 52)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        // Устанавливаем отступы от границ экрана до ячеек
+        return UIEdgeInsets(top: 24, left: 18, bottom: 24, right: 19)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
+                                                         height: UIView.layoutFittingExpandedSize.height),
+                                                  withHorizontalFittingPriority: .required,
+                                                  verticalFittingPriority: .fittingSizeLevel)
+    }
+}
+
+extension HabitOrEventViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            if let selectedEmojiIndexPath = selectedEmojiIndexPath, let previousCell = collectionView.cellForItem(at: selectedEmojiIndexPath) as? HabitOrEventCollectionViewCell {
+                previousCell.deselectEmoji()
+            }
+            selectedEmojiIndexPath = indexPath
+            trackerEmoji = emojis[indexPath.row]
+            if let cell = collectionView.cellForItem(at: indexPath) as? HabitOrEventCollectionViewCell {
+                cell.selectEmoji()
+            }
+        } else {
+            if let selectedColorIndexPath = selectedColorIndexPath, let previousCell = collectionView.cellForItem(at: selectedColorIndexPath) as? HabitOrEventCollectionViewCell {
+                previousCell.deselectColor()
+            }
+            selectedColorIndexPath = indexPath
+            trackerColor = colors[indexPath.row]
+            if let cell = collectionView.cellForItem(at: indexPath) as? HabitOrEventCollectionViewCell {
+                let colorForBorder = colors[indexPath.row].withAlphaComponent(0.3)
+                cell.selectColor(color: colorForBorder)
+            }
+        }
+        updateCreateButtonState()
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? HabitOrEventCollectionViewCell else {return}
+        if indexPath.section == 0 {
+            cell.deselectEmoji()
+        } else {
+            cell.deselectColor()
+        }
+        updateCreateButtonState()
     }
 }
 

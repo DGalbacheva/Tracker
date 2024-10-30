@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		334268D62CD11C930033762F /* HabitOrEventCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334268D52CD11C930033762F /* HabitOrEventCollectionViewCell.swift */; };
+		334268D82CD11F590033762F /* DataForHabit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334268D72CD11F590033762F /* DataForHabit.swift */; };
 		334CCE1C2CC7B5410013ED5A /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334CCE1B2CC7B5410013ED5A /* ScheduleTableViewCell.swift */; };
 		334CCE1F2CC7C1CD0013ED5A /* TrackerTypeSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334CCE1E2CC7C1CD0013ED5A /* TrackerTypeSelectionViewController.swift */; };
 		334CCE222CC7C2910013ED5A /* HabitOrEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334CCE212CC7C2910013ED5A /* HabitOrEventViewController.swift */; };
@@ -52,6 +54,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		334268D52CD11C930033762F /* HabitOrEventCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitOrEventCollectionViewCell.swift; sourceTree = "<group>"; };
+		334268D72CD11F590033762F /* DataForHabit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataForHabit.swift; sourceTree = "<group>"; };
 		334CCE1B2CC7B5410013ED5A /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		334CCE1E2CC7C1CD0013ED5A /* TrackerTypeSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTypeSelectionViewController.swift; sourceTree = "<group>"; };
 		334CCE212CC7C2910013ED5A /* HabitOrEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitOrEventViewController.swift; sourceTree = "<group>"; };
@@ -133,6 +137,8 @@
 			children = (
 				334CCE212CC7C2910013ED5A /* HabitOrEventViewController.swift */,
 				334CCE232CC7C6230013ED5A /* HabitOrEventTableViewCell.swift */,
+				334268D52CD11C930033762F /* HabitOrEventCollectionViewCell.swift */,
+				334268D72CD11F590033762F /* DataForHabit.swift */,
 			);
 			path = HabitOrEventViewController;
 			sourceTree = "<group>";
@@ -387,7 +393,9 @@
 				334CCE2C2CC7CB120013ED5A /* CategoryTableViewCell.swift in Sources */,
 				E484D1232C7B1AB900B43D86 /* SceneDelegate.swift in Sources */,
 				E484D16C2C7B207000B43D86 /* WeekDay.swift in Sources */,
+				334268D62CD11C930033762F /* HabitOrEventCollectionViewCell.swift in Sources */,
 				E484D1682C7B203D00B43D86 /* TrackerCategory.swift in Sources */,
+				334268D82CD11F590033762F /* DataForHabit.swift in Sources */,
 				E484D16A2C7B205100B43D86 /* TrackerRecord.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
