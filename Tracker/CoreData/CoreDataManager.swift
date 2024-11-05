@@ -58,13 +58,13 @@ final class CoreDataManager: NSObject {
         
         do {
             try fetchedResultsController.performFetch()
-            print("Грузим Трекеры")
+            print("Loading Trackers")
             if let fetchedObjects = fetchedResultsController.fetchedObjects {
                 let trackerCategories = convertToTrackerCategories(fetchedObjects)
                 delegate?.didChangeData(trackerCategories)
             }
         } catch {
-            print("Ошибка выполнения запроса: \(error)")
+            print("Request execution error: \(error)")
         }
         
     }
@@ -110,13 +110,13 @@ extension CoreDataManager: NSFetchedResultsControllerDelegate {
         print("Will change content")
     }
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<any NSFetchRequestResult>) {
-        print("Вызвался DidChangeContent")
+        print("Volunteered DidChangeContent")
         
         if let fetchedObjects = fetchedResultsController.fetchedObjects {
             let trackerCategories = convertToTrackerCategories(fetchedObjects)
             delegate?.didChangeData(trackerCategories)
         } else {
-            print("Не удалось получить запрашиваемые объекты")
+            print("Failed to obtain requested objects")
         }
     }
     

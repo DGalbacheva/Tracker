@@ -24,18 +24,18 @@ final class TrackerRecordStore {
         return NSFetchRequest<TrackerRecordCD>(entityName: "TrackerRecordCD")
     }
     
-    func addTrackerRecord(identifier: UUID, date: Date) throws {
+    func addTrackerRecord(trackerId: UUID, date: Date) throws {
         let trackerRecord = TrackerRecordCD(context: context)
-        trackerRecord.identifier = identifier
+        trackerRecord.trackerId = trackerId
         trackerRecord.date = Calendar.current.startOfDay(for: date)
         try context.save()
     }
     
-    func removeTrackerRecord(identifier: UUID, date: Date) {
+    func removeTrackerRecord(trackerId: UUID, date: Date) {
         let fetchRequest = fetchRequest()
         let startOfDay = Calendar.current.startOfDay(for: date)
         
-        fetchRequest.predicate = NSPredicate(format: "identifier == %@ AND date == %@", identifier as CVarArg, startOfDay as NSDate)
+        fetchRequest.predicate = NSPredicate(format: "trackerId == %@ AND date == %@", trackerId as CVarArg, startOfDay as NSDate)
         
         do {
             let records = try context.fetch(fetchRequest)
@@ -44,40 +44,40 @@ final class TrackerRecordStore {
             }
             try context.save()
         } catch {
-            print("Не удалось удалить запись трекера: \(error)")
+            print("Failed to delete tracker entry: \(error)")
         }
     }
     
-    func getTrackerRecords(by identifier: UUID) -> [TrackerRecord] {
+    func getTrackerRecords(by trackerId: UUID) -> [TrackerRecord] {
         let fetchRequest = fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "identifier == %@", identifier as CVarArg)
+        fetchRequest.predicate = NSPredicate(format: "trackerId == %@", trackerId as CVarArg)
         var trackerRecords: [TrackerRecord] = []
         var trackerRecordsCD: [TrackerRecordCD] = []
         do {
             trackerRecordsCD = try context.fetch(fetchRequest)
             for i in trackerRecordsCD {
-                if let recordID = i.identifier, let recordDate = i.date {
+                if let recordID = i.trackerId, let recordDate = i.date {
                     trackerRecords.append(TrackerRecord(trackerId: recordID, date: recordDate))
                 }
             }
             return trackerRecords
         } catch {
-            print("Не удалось получить записи TrackerRecordCD: \(error)")
+            print("Failed to get TrackerRecordCD records: \(error)")
             return []
         }
     }
     
-    func isTrackerCompleted(identifier: UUID, date: Date) -> Bool {
+    func isTrackerCompleted(trackerId: UUID, date: Date) -> Bool {
         let fetchRequest = fetchRequest()
         let startOfDay = Calendar.current.startOfDay(for: date)
         
-        fetchRequest.predicate = NSPredicate(format: "identifier == %@ AND date == %@", identifier as CVarArg, startOfDay as NSDate)
+        fetchRequest.predicate = NSPredicate(format: "trackerId == %@ AND date == %@", trackerId as CVarArg, startOfDay as NSDate)
         
         do {
             let count = try context.count(for: fetchRequest)
             return count > 0
         } catch {
-            print("Не удалось проверить завершенность трекера: \(error)")
+            print("Failed to verify tracker completion: \(error)")
             return false
         }
     }
@@ -88,7 +88,7 @@ final class TrackerRecordStore {
         do {
             trackerRecordCD = try context.fetch(fetchRequest)
         } catch {
-            print("В базе данных нет записей о выполненных трекерах")
+            print("There are no records of completed trackers in the database")
         }
         for i in trackerRecordCD {
             context.delete(i)
@@ -97,7 +97,7 @@ final class TrackerRecordStore {
         do {
             try context.save()
         } catch {
-            print("Не удалось удалить все записи о выполненных трекерах")
+            print("Failed to delete all completed tracker records")
         }
     }
     
@@ -108,13 +108,13 @@ final class TrackerRecordStore {
         do {
             trackerRecordsCD = try context.fetch(fetchRequest)
             for i in trackerRecordsCD {
-                if let recordID = i.identifier, let recordDate = i.date {
+                if let recordID = i.trackerId, let recordDate = i.date {
                     trackerRecords.append(TrackerRecord(trackerId: recordID, date: recordDate))
                 }
             }
             return trackerRecords
         } catch {
-            print("Не удалось получить записи TrackerRecordCD: \(error)")
+            print("Failed to get TrackerRecordCD records: \(error)")
             return []
         }
     }

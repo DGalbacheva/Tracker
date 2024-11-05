@@ -16,6 +16,11 @@ protocol TrackerCollectionViewCellDelegate: AnyObject {
 final class TrackersViewController: UIViewController {
     //MARK: - Properties
     
+    private let coreDataManager = CoreDataManager.shared
+    private let trackerStore = TrackerStore()
+    private let trackerCategoryStore = TrackerCategoryStore()
+    private let trackerRecordStore = TrackerRecordStore()
+    
     private let currentDate: Date = Date()
     private var selectedDate: Date = Date()
     
@@ -37,9 +42,17 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .whiteDay
-        filterTrackers(for: Date())
+       // filterTrackers(for: Date())
         
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
+        
+        coreDataManager.delegate = self
+        coreDataManager.configureFetchedResultsController(for: WeekDay.fromDate(selectedDate))
+        showOrHideCollection()
+        
+        trackerStore.removeAllTrackers()
+        trackerRecordStore.removeAllTrackerRecords()
+        trackerCategoryStore.removeAllTrackerCategory()
         
         addSubViews()
     }
@@ -181,7 +194,7 @@ final class TrackersViewController: UIViewController {
     //Filter the VisibleCategories array by weekday.numberValue when the date changes
     @objc func dateChanged(_ sender: UIDatePicker) {
         selectedDate = sender.date
-        filterTrackers(for: sender.date)
+        coreDataManager.configureFetchedResultsController(for: WeekDay.fromDate(selectedDate))
     }
     
     //MARK: - Helper Methods
@@ -194,16 +207,6 @@ final class TrackersViewController: UIViewController {
         }
     }
     
-    func filterTrackers(for date: Date) {
-        guard let dayOfWeek = getDayOfWeek(from: date) else { return }
-        visibleCategories = DataManager.shared.mockTrackers.map { category in
-            let filteredTrackers = category.trackers.filter { $0.schedule.contains(dayOfWeek) }
-            return TrackerCategory(title: category.title, trackers: filteredTrackers)
-        }.filter { !$0.trackers.isEmpty }
-        showOrHideCollection()
-        collectionView.reloadData()
-    }
-    
     func getDayOfWeek(from date: Date) -> WeekDay? {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.weekday], from: date)
@@ -213,7 +216,7 @@ final class TrackersViewController: UIViewController {
     
     //Checking wether the tracker is completed today using the ID
     func isTrackerCompleted(_ tracker: Tracker, for date: Date) -> Bool {
-        return completedTrackers.contains { $0.trackerId == tracker.id && Calendar.current.isDate($0.date, inSameDayAs: date) }
+        return trackerRecordStore.isTrackerCompleted(trackerId: tracker.id, date: date)
     }
 }
 
@@ -254,9 +257,10 @@ extension TrackersViewController: UICollectionViewDataSource {
         }
         
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
-        let isComplete = isTrackerCompleted(tracker, for: selectedDate)
-        let completionCount = completedTrackers.filter { $0.trackerId == tracker.id }.count
-        cell.configure(id: tracker.id, title: tracker.title, color: tracker.color, emoji: tracker.emoji, completedDays: completionCount, isEnabled: true, isCompletedToday: isComplete, indexPath: indexPath)
+        
+        let completionCount2 = trackerRecordStore.getTrackerRecords(by: tracker.id).count
+        let isCompleteToday = isTrackerCompleted(tracker, for: selectedDate)
+        cell.configure(id: tracker.id, title: tracker.title, color: tracker.color, emoji: tracker.emoji, completedDays: completionCount2, isEnabled: true, isCompletedToday: isCompleteToday, indexPath: indexPath)
         cell.delegate = self
         return cell
     }
@@ -276,7 +280,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             assertionFailure("Invalid element type for SupplementaryElement")
             return UICollectionReusableView()
         }
-        view.titleLabel.text = DataManager.shared.mockTrackers[indexPath.section].title
+        view.titleLabel.text = visibleCategories[indexPath.section].title
         return view
     }
 }
@@ -339,15 +343,20 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
             return
         }
         
-        if let indexPath = collectionView.indexPath(for: cell) {
-            let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
-            let record = TrackerRecord(trackerId: tracker.id, date: selectedDate)
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
+        
+        do {
             if isTrackerCompleted(tracker, for: selectedDate) {
-                completedTrackers.removeAll { $0.trackerId == tracker.id && Calendar.current.isDate($0.date, inSameDayAs: selectedDate) }
+                trackerRecordStore.removeTrackerRecord(trackerId: tracker.id, date: selectedDate)
+                print("Deleting")
             } else {
-                completedTrackers.append(record)
+                try trackerRecordStore.addTrackerRecord(trackerId: tracker.id, date: selectedDate)
+                print("Adding")
             }
             collectionView.reloadItems(at: [indexPath])
+        } catch {
+            print("Error updating tracker state: \(error)")
         }
     }
 }
@@ -356,14 +365,14 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
 
 extension TrackersViewController: TrackerTypeSelectionViewControllerDelegate {
     func addNewTracker(category: String, tracker: Tracker) {
-        if let categoryIndex = DataManager.shared.mockTrackers.firstIndex(where: { $0.title == category }) {
-            var updatedCategory = DataManager.shared.mockTrackers[categoryIndex]
-            updatedCategory = TrackerCategory(title: updatedCategory.title, trackers: updatedCategory.trackers + [tracker])
-            DataManager.shared.mockTrackers[categoryIndex] = updatedCategory
-        } else {
-            let newCategory = TrackerCategory(title: category, trackers: [tracker])
-            DataManager.shared.mockTrackers.append(newCategory)
-        }
-        filterTrackers(for: selectedDate)
+        trackerStore.addNewTracker(tracker: tracker, categoryName: category)
+    }
+}
+
+extension TrackersViewController: CoreDataManagerDelegate {
+    func didChangeData(_ data: [TrackerCategory]) {
+        visibleCategories = data
+        showOrHideCollection()
+        collectionView.reloadData()
     }
 }

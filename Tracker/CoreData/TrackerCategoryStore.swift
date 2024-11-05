@@ -32,7 +32,7 @@ final class TrackerCategoryStore {
         do {
             trackerCategoryFromDB = try context.fetch(request)
         }  catch {
-            print("В базе данных нет трекеров")
+            print("There are no trackers in the database")
             return
         }
         for i in trackerCategoryFromDB {
@@ -42,7 +42,7 @@ final class TrackerCategoryStore {
         do {
             try context.save()
         } catch {
-            print("Не удалось удалить все записи о выполненных трекерах")
+            print("Failed to delete all completed tracker records")
         }
     }
     
@@ -53,14 +53,14 @@ final class TrackerCategoryStore {
         do {
             trackerCategoryesFromDB = try context.fetch(request)
         }  catch {
-            print("В базе данных нет TrackerCategoryCD")
+            print("There is no TrackerCategoryCD in the database")
             return []
         }
         for i in trackerCategoryesFromDB {
             if let newTrackerCategory = createTrackerCategory(from: i) {
                 trackerCategoryesArray.append(newTrackerCategory)
             } else {
-                print("Не удалось создать категории из TrackerCategoryCD")
+                print("Failed to create categories from TrackerCategoryCD")
             }
         }
         return trackerCategoryesArray
@@ -88,7 +88,7 @@ final class TrackerCategoryStore {
         do {
             trackersFromDB = try context.fetch(fetchRequest)
         } catch {
-            print("Ошибка загрузки трекеров для дня недели \(weekday): \(error)")
+            print("Error loading trackers for day of week \(weekday): \(error)")
             return []
         }
         
@@ -134,7 +134,7 @@ final class TrackerCategoryStore {
         do {
             try context.save()
         } catch {
-            print("Не удалось сохранить новую категорию")
+            print("Failed to save new category")
         }
     }
 }

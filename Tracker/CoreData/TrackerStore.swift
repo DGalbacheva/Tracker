@@ -32,7 +32,7 @@ final class TrackerStore {
         do {
             categories = try context.fetch(fetchRequest)
         } catch {
-            print("Не удалось запросить категории")
+            print("Failed to request categories")
         }
         
         let category: TrackerCategoryCD
@@ -55,7 +55,7 @@ final class TrackerStore {
         do {
             try context.save()
         } catch {
-            print("Не удалось сохранить изменения в контексте")
+            print("Failed to save changes to context")
         }
     }
     
@@ -82,7 +82,7 @@ final class TrackerStore {
         do {
             trackersFromDB = try context.fetch(request)
         }  catch {
-            print("В базе данных нет трекеров")
+            print("There are no trackers in the database")
             return
         }
         for i in trackersFromDB {
@@ -92,7 +92,7 @@ final class TrackerStore {
         do {
             try context.save()
         } catch {
-            print("Не удалось удалить все записи о выполненных трекерах")
+            print("Failed to delete all completed tracker records")
         }
     }
     
@@ -103,7 +103,7 @@ final class TrackerStore {
         do {
             trackersFromDB = try context.fetch(request)
         }  catch {
-            print("В базе данных нет трекеров")
+            print("There are no trackers in the database")
             return []
         }
         for i in trackersFromDB {
@@ -117,7 +117,7 @@ final class TrackerStore {
                             \(newTracker.color)
                           """)
             } else {
-                print("Не удалось создать трекер из TrackerCD")
+                print("Failed to create tracker from TrackerCD")
             }
         }
         return trackersArray

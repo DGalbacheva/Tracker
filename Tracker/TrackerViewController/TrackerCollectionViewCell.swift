@@ -11,6 +11,9 @@ import UIKit
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
+    static let Identifier = "TrackerCollectionViewCell"
+    private let coreDataManager = CoreDataManager.shared
+    
     weak var delegate: TrackerCollectionViewCellDelegate?
     private var isCompletedToday: Bool = false
     private var trackerId: UUID? = nil
