@@ -42,7 +42,6 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .whiteDay
-       // filterTrackers(for: Date())
         
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         
@@ -258,9 +257,9 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
         
-        let completionCount2 = trackerRecordStore.getTrackerRecords(by: tracker.id).count
+        let completionCount = trackerRecordStore.getTrackerRecords(by: tracker.id).count
         let isCompleteToday = isTrackerCompleted(tracker, for: selectedDate)
-        cell.configure(id: tracker.id, title: tracker.title, color: tracker.color, emoji: tracker.emoji, completedDays: completionCount2, isEnabled: true, isCompletedToday: isCompleteToday, indexPath: indexPath)
+        cell.configure(id: tracker.id, title: tracker.title, color: tracker.color, emoji: tracker.emoji, completedDays: completionCount, isEnabled: true, isCompletedToday: isCompleteToday, indexPath: indexPath)
         cell.delegate = self
         return cell
     }

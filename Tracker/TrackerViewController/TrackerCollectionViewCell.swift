@@ -11,7 +11,7 @@ import UIKit
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
-    static let Identifier = "TrackerCollectionViewCell"
+    static let identifier = "TrackerCollectionViewCell"
     private let coreDataManager = CoreDataManager.shared
     
     weak var delegate: TrackerCollectionViewCellDelegate?

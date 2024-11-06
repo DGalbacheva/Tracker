@@ -55,8 +55,8 @@ final class TrackerRecordStore {
         var trackerRecordsCD: [TrackerRecordCD] = []
         do {
             trackerRecordsCD = try context.fetch(fetchRequest)
-            for i in trackerRecordsCD {
-                if let recordID = i.trackerId, let recordDate = i.date {
+            for category in trackerRecordsCD {
+                if let recordID = category.trackerId, let recordDate = category.date {
                     trackerRecords.append(TrackerRecord(trackerId: recordID, date: recordDate))
                 }
             }
