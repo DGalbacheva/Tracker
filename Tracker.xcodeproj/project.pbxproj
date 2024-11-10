@@ -16,7 +16,7 @@
 		334269972CDA28F80033762F /* UIColorMarshalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334269962CDA28F80033762F /* UIColorMarshalling.swift */; };
 		334269992CDA29650033762F /* ExtensionForArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334269982CDA29650033762F /* ExtensionForArray.swift */; };
 		3342699B2CDA29850033762F /* ExtensionForString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3342699A2CDA29850033762F /* ExtensionForString.swift */; };
-		334269AB2CDB3A680033762F /* TrackerCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 334269A92CDB3A680033762F /* TrackerCoreData.xcdatamodeld */; };
+		334269DD2CDDE38E0033762F /* TrackerCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 334269DB2CDDE38E0033762F /* TrackerCoreData.xcdatamodeld */; };
 		334CCE1C2CC7B5410013ED5A /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334CCE1B2CC7B5410013ED5A /* ScheduleTableViewCell.swift */; };
 		334CCE1F2CC7C1CD0013ED5A /* TrackerTypeSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334CCE1E2CC7C1CD0013ED5A /* TrackerTypeSelectionViewController.swift */; };
 		334CCE222CC7C2910013ED5A /* HabitOrEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334CCE212CC7C2910013ED5A /* HabitOrEventViewController.swift */; };
@@ -71,7 +71,7 @@
 		334269962CDA28F80033762F /* UIColorMarshalling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorMarshalling.swift; sourceTree = "<group>"; };
 		334269982CDA29650033762F /* ExtensionForArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForArray.swift; sourceTree = "<group>"; };
 		3342699A2CDA29850033762F /* ExtensionForString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionForString.swift; sourceTree = "<group>"; };
-		334269AA2CDB3A680033762F /* TrackerCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerCoreData.xcdatamodel; sourceTree = "<group>"; };
+		334269DC2CDDE38E0033762F /* TrackerCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerCoreData.xcdatamodel; sourceTree = "<group>"; };
 		334CCE1B2CC7B5410013ED5A /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		334CCE1E2CC7C1CD0013ED5A /* TrackerTypeSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTypeSelectionViewController.swift; sourceTree = "<group>"; };
 		334CCE212CC7C2910013ED5A /* HabitOrEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitOrEventViewController.swift; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 				3342698F2CDA28790033762F /* TrackerStore.swift */,
 				334269912CDA28A10033762F /* TrackerCategoryStore.swift */,
 				334269932CDA28C50033762F /* TrackerRecordStore.swift */,
-				334269A92CDB3A680033762F /* TrackerCoreData.xcdatamodeld */,
+				334269DB2CDDE38E0033762F /* TrackerCoreData.xcdatamodeld */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -443,7 +443,7 @@
 				E484D1682C7B203D00B43D86 /* TrackerCategory.swift in Sources */,
 				334268D82CD11F590033762F /* DataForHabit.swift in Sources */,
 				334269972CDA28F80033762F /* UIColorMarshalling.swift in Sources */,
-				334269AB2CDB3A680033762F /* TrackerCoreData.xcdatamodeld in Sources */,
+				334269DD2CDDE38E0033762F /* TrackerCoreData.xcdatamodeld in Sources */,
 				E484D16A2C7B205100B43D86 /* TrackerRecord.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -795,12 +795,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		334269A92CDB3A680033762F /* TrackerCoreData.xcdatamodeld */ = {
+		334269DB2CDDE38E0033762F /* TrackerCoreData.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				334269AA2CDB3A680033762F /* TrackerCoreData.xcdatamodel */,
+				334269DC2CDDE38E0033762F /* TrackerCoreData.xcdatamodel */,
 			);
-			currentVersion = 334269AA2CDB3A680033762F /* TrackerCoreData.xcdatamodel */;
+			currentVersion = 334269DC2CDDE38E0033762F /* TrackerCoreData.xcdatamodel */;
 			name = TrackerCoreData.xcdatamodeld;
 			path = "/Users/macbookpro15/Documents/send to revue/Tracker/Tracker/CoreData/TrackerCoreData.xcdatamodeld";
 			sourceTree = "<group>";
