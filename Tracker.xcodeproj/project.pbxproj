@@ -23,7 +23,7 @@
 		334CCE272CC7C76C0013ED5A /* CreateCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334CCE262CC7C76C0013ED5A /* CreateCategoryViewController.swift */; };
 		334CCE2A2CC7CA020013ED5A /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334CCE292CC7CA020013ED5A /* CategoryViewController.swift */; };
 		334CCE2C2CC7CB120013ED5A /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334CCE2B2CC7CB120013ED5A /* CategoryTableViewCell.swift */; };
-		33FA10FC2CE4A8EE00E1986C /* TrackerCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 33FA10FA2CE4A8EE00E1986C /* TrackerCoreData.xcdatamodeld */; };
+		33FA10FF2CE4AA2800E1986C /* TrackerCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 33FA10FD2CE4AA2800E1986C /* TrackerCoreData.xcdatamodeld */; };
 		E484D1212C7B1AB900B43D86 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E484D1202C7B1AB900B43D86 /* AppDelegate.swift */; };
 		E484D1232C7B1AB900B43D86 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E484D1222C7B1AB900B43D86 /* SceneDelegate.swift */; };
 		E484D1252C7B1AB900B43D86 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E484D1242C7B1AB900B43D86 /* TrackersViewController.swift */; };
@@ -78,7 +78,7 @@
 		334CCE262CC7C76C0013ED5A /* CreateCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCategoryViewController.swift; sourceTree = "<group>"; };
 		334CCE292CC7CA020013ED5A /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		334CCE2B2CC7CB120013ED5A /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
-		33FA10FB2CE4A8EE00E1986C /* TrackerCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerCoreData.xcdatamodel; sourceTree = "<group>"; };
+		33FA10FE2CE4AA2800E1986C /* TrackerCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerCoreData.xcdatamodel; sourceTree = "<group>"; };
 		E484D11D2C7B1AB900B43D86 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E484D1202C7B1AB900B43D86 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E484D1222C7B1AB900B43D86 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 				3342698F2CDA28790033762F /* TrackerStore.swift */,
 				334269912CDA28A10033762F /* TrackerCategoryStore.swift */,
 				334269932CDA28C50033762F /* TrackerRecordStore.swift */,
-				33FA10FA2CE4A8EE00E1986C /* TrackerCoreData.xcdatamodeld */,
+				33FA10FD2CE4AA2800E1986C /* TrackerCoreData.xcdatamodeld */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -437,13 +437,13 @@
 				334CCE2A2CC7CA020013ED5A /* CategoryViewController.swift in Sources */,
 				334269922CDA28A10033762F /* TrackerCategoryStore.swift in Sources */,
 				334CCE2C2CC7CB120013ED5A /* CategoryTableViewCell.swift in Sources */,
-				33FA10FC2CE4A8EE00E1986C /* TrackerCoreData.xcdatamodeld in Sources */,
 				E484D1232C7B1AB900B43D86 /* SceneDelegate.swift in Sources */,
 				E484D16C2C7B207000B43D86 /* WeekDay.swift in Sources */,
 				334268D62CD11C930033762F /* HabitOrEventCollectionViewCell.swift in Sources */,
 				E484D1682C7B203D00B43D86 /* TrackerCategory.swift in Sources */,
 				334268D82CD11F590033762F /* DataForHabit.swift in Sources */,
 				334269972CDA28F80033762F /* UIColorMarshalling.swift in Sources */,
+				33FA10FF2CE4AA2800E1986C /* TrackerCoreData.xcdatamodeld in Sources */,
 				E484D16A2C7B205100B43D86 /* TrackerRecord.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -795,12 +795,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		33FA10FA2CE4A8EE00E1986C /* TrackerCoreData.xcdatamodeld */ = {
+		33FA10FD2CE4AA2800E1986C /* TrackerCoreData.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				33FA10FB2CE4A8EE00E1986C /* TrackerCoreData.xcdatamodel */,
+				33FA10FE2CE4AA2800E1986C /* TrackerCoreData.xcdatamodel */,
 			);
-			currentVersion = 33FA10FB2CE4A8EE00E1986C /* TrackerCoreData.xcdatamodel */;
+			currentVersion = 33FA10FE2CE4AA2800E1986C /* TrackerCoreData.xcdatamodel */;
 			name = TrackerCoreData.xcdatamodeld;
 			path = /Users/macbookpro15/Documents/5/Tracker/CoreData/TrackerCoreData.xcdatamodeld;
 			sourceTree = "<group>";
