@@ -47,3 +47,21 @@ enum WeekDay: String, CaseIterable {
         }
     }
 }
+
+extension WeekDay {
+    static func fromDate(_ date: Date) -> String {
+        let calendar = Calendar.current
+        let weekdayNumber = calendar.component(.weekday, from: date)
+        
+        switch weekdayNumber {
+        case 1: return WeekDay.sunday.rawValue
+        case 2: return WeekDay.monday.rawValue
+        case 3: return WeekDay.tuesday.rawValue
+        case 4: return WeekDay.wednesday.rawValue
+        case 5: return WeekDay.thursday.rawValue
+        case 6: return WeekDay.friday.rawValue
+        case 7: return WeekDay.saturday.rawValue
+        default: return WeekDay.sunday.rawValue
+        }
+    }
+}
