@@ -802,7 +802,7 @@
 			);
 			currentVersion = E42595E52CE4AAF600D77BEE /* TrackerCoreData.xcdatamodel */;
 			name = TrackerCoreData.xcdatamodeld;
-			path = ../../../5/Tracker/CoreData/TrackerCoreData.xcdatamodeld;
+			path = TrackerCoreData.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
