@@ -1,5 +1,5 @@
 //
-//  OnboardingViewController.swift
+//  ViewControllerOnboarding.swift
 //  Tracker
 //
 //  Created by Doroteya Galbacheva on 18.11.2024.
@@ -7,7 +7,9 @@
 
 import UIKit
 
-final class OnboardingViewController: UIViewController {
+final class ViewControllerOnboarding: UIViewController {
+    var onboardingFinished: (() -> Void)?
+    
     private lazy var button = UIButton()
     private lazy var imageView = UIImageView()
     private lazy var label = UILabel()
@@ -58,17 +60,13 @@ final class OnboardingViewController: UIViewController {
     
     @objc
     private func targetForButton() {
+        onboardingFinished?()
         UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
-        
-        if let window = UIApplication.shared.windows.first {
-            let newViewController = TabBarViewController()
-            window.rootViewController = newViewController
-            window.makeKeyAndVisible()
-        }
     }
-    func configLableAndImage(text: String, image: UIImage?) {
-        label.text = text
-        imageView.image = image
+    
+    func configLableAndImage(onboardingPage: OnboardingPage) {
+        label.text = onboardingPage.text
+        imageView.image = onboardingPage.image
     }
 
 }

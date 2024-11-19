@@ -2,7 +2,11 @@
 //  FlagsAndSettings.swift
 //  Tracker
 //
-//  Created by MacBook Pro 15 on 18.11.2024.
+//  Created by Doroteya Galbacheva on 18.11.2024.
 //
 
 import Foundation
+
+final class FlagsAndSettings {
+    let hasSeenOnboarding = UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
+}
