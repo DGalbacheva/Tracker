@@ -64,7 +64,7 @@ final class TrackersViewController: UIViewController {
     
     private func addDatePicker() {
         datePicker.datePickerMode  =  .date
-        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.locale = .current
         datePicker.preferredDatePickerStyle = .compact
         datePicker.widthAnchor.constraint(equalToConstant: 100).isActive = true
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
@@ -72,7 +72,8 @@ final class TrackersViewController: UIViewController {
     }
     
     private func addMainLabel() {
-        mainLabel.text = "Трекеры"
+        let text = NSLocalizedString("trackers", comment: "Текст для trackerLable")
+        mainLabel.text = text
         mainLabel.font = .systemFont(ofSize: 34, weight: .bold)
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mainLabel)
@@ -91,7 +92,8 @@ final class TrackersViewController: UIViewController {
         searchTextField.layer.cornerRadius = 15
         searchTextField.font = .systemFont(ofSize: 17, weight: .regular)
         searchTextField.textAlignment = .left
-        searchTextField.placeholder = "Поиск"
+        let textForPlaceholder = NSLocalizedString("search", comment: "Текст для UITextField")
+        searchTextField.placeholder = textForPlaceholder
         let searchIcon = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         searchIcon.tintColor = .gray
         searchIcon.frame = CGRect(x: 8, y: 0, width: 16, height: 16)
@@ -129,7 +131,8 @@ final class TrackersViewController: UIViewController {
     }
     
     private func addPlaceholderLabel() {
-        placeholderLabel.text = "Что будем отслеживать?"
+        let textForLable = NSLocalizedString("emptyState.title", comment: "Текст для заглушки")
+        placeholderLabel.text = textForLable
         placeholderLabel.font = .systemFont(ofSize: 12, weight: .medium)
         placeholderLabel.textAlignment = .center
         
@@ -339,10 +342,8 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
         do {
             if isTrackerCompleted(tracker, for: selectedDate) {
                 trackerRecordStore.removeTrackerRecord(trackerId: tracker.id, date: selectedDate)
-                print("Deleting")
             } else {
                 try trackerRecordStore.addTrackerRecord(trackerId: tracker.id, date: selectedDate)
-                print("Adding")
             }
             collectionView.reloadItems(at: [indexPath])
         } catch {

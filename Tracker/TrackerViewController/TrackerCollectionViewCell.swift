@@ -122,8 +122,13 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         trackerText.text = title
         emojiLabel.text = emoji
         
-        let wordDay = pluralizeDays(completedDays)
-        dayCountLabel.text = "\(wordDay)"
+        //let wordDay = pluralizeDays(completedDays)
+        //dayCountLabel.text = "\(wordDay)"
+        
+        dayCountLabel.text = String.localizedStringWithFormat(
+            NSLocalizedString("numberOfTasks", comment: "подбор формы записи дня"),
+            completedDays
+        )
         
         let image = isCompletedToday ? doneImage : plusImage
         plusButton.setImage(image, for: .normal)

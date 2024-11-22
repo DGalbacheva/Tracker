@@ -2,6 +2,15 @@
   Localizable.strings
   Tracker
 
-  Created by MacBook Pro 15 on 22.11.2024.
+  Created by Doroteya Galbacheva on 22.11.2024.
   
 */
+
+"trackers" = "Трекеры";
+"filters" = "Фильтры";
+"statistics" = "Статистика";
+"search" = "Поиск";
+"emptyState.title" = "Что будем отслеживать?";
+"delete" = "Удалить";
+"delete.confirmation" = "Уверены что хотите удалить трекер?";
+"cancel" = "Отменить";
