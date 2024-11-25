@@ -8,11 +8,13 @@
 //MARK: - Tracker Cell Class
 
 import UIKit
+import YandexMobileMetrica
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "TrackerCollectionViewCell"
     private let coreDataManager = CoreDataManager.shared
+    private let analyticsService = AnalyticsService()
     
     weak var delegate: TrackerCollectionViewCellDelegate?
     private var isCompletedToday: Bool = false
@@ -162,6 +164,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     @objc private func plusButtonTapped() {
         delegate?.buttonTapped(in: self)
+        analyticsService.report(event: "click", params: ["screen": "Main", "item": "plus_on_trackerCard"])
     }
     
     
