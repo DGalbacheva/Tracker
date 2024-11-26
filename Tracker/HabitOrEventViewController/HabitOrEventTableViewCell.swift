@@ -15,9 +15,15 @@ final class HabitOrEventTableViewСеll: UITableViewCell {
         return UIImageView(image: UIImage(named: "chevron"))
     }()
     private lazy var nameLable = UILabel()
-    private lazy var descriptionLable = UILabel()
+    private lazy var descriptionLabel = UILabel()
+    private var descriptionLabelTopConstraint: NSLayoutConstraint!
+    private var nameLabelCenterYConstraint: NSLayoutConstraint!
     
-    
+    var descriptionLabelIsEmpty = false {
+        didSet {
+            updateConstraintsForDescriptionLabel()
+        }
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
@@ -32,14 +38,14 @@ final class HabitOrEventTableViewСеll: UITableViewCell {
         nameLable.font = .systemFont(ofSize: 17, weight: .regular)
         nameLable.textColor = .blackDay
         
-        descriptionLable.font = .systemFont(ofSize: 17, weight: .regular)
-        descriptionLable.textColor = .ypGray
+        descriptionLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        descriptionLabel.textColor = .ypGray
         
-        descriptionLable.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLable.translatesAutoresizingMaskIntoConstraints = false
         chevronImg.translatesAutoresizingMaskIntoConstraints = false
         
-        contentView.addSubview(descriptionLable)
+        contentView.addSubview(descriptionLabel)
         contentView.addSubview(chevronImg)
         contentView.addSubview(nameLable)
         
@@ -58,22 +64,36 @@ final class HabitOrEventTableViewСеll: UITableViewCell {
             nameLable.trailingAnchor.constraint(equalTo: chevronImg.leadingAnchor),
             nameLable.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
             
-            descriptionLable.leadingAnchor.constraint(equalTo: nameLable.leadingAnchor),
-            descriptionLable.topAnchor.constraint(equalTo: nameLable.bottomAnchor),
-            descriptionLable.trailingAnchor.constraint(equalTo: nameLable.trailingAnchor),
-            descriptionLable.heightAnchor.constraint(equalToConstant: 22)
+            descriptionLabel.leadingAnchor.constraint(equalTo: nameLable.leadingAnchor),
+            descriptionLabel.topAnchor.constraint(equalTo: nameLable.bottomAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: nameLable.trailingAnchor),
+            descriptionLabel.heightAnchor.constraint(equalToConstant: 22)
         ])
+        
+        updateConstraintsForDescriptionLabel()
+    }
+    
+    private func updateConstraintsForDescriptionLabel() {
+        if descriptionLabelIsEmpty {
+            descriptionLabel.isHidden = true
+            descriptionLabelTopConstraint.isActive = false
+            nameLabelCenterYConstraint.isActive = true
+        } else {
+            descriptionLabel.isHidden = false
+            nameLabelCenterYConstraint.isActive = false
+            descriptionLabelTopConstraint.isActive = true
+        }
     }
     
     func configureNameLable(textNameLable: String) {
         nameLable.text = textNameLable
     }
     
-    func configureDescriptionLable(textDescriptionLable: String) {
-        var text = textDescriptionLable
+    func configureDescriptionLabel(textDescriptionLabel: String) {
+        var text = textDescriptionLabel
         if text.last == "," {
             text.removeLast()
         }
-        descriptionLable.text = text
+        descriptionLabel.text = text
     }
 }

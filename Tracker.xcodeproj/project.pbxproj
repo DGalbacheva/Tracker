@@ -34,6 +34,7 @@
 		33996E032CEB747000C9C990 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33996E022CEB747000C9C990 /* TabBarViewController.swift */; };
 		33A72EB62CF1FCD300BB1424 /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 33A72EB52CF1FCD300BB1424 /* InlineSnapshotTesting */; };
 		33A72EB82CF1FCD300BB1424 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 33A72EB72CF1FCD300BB1424 /* SnapshotTesting */; };
+		33ABDC1C2CF5CC17002CC236 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33ABDC1B2CF5CC17002CC236 /* EditViewController.swift */; };
 		3DDC06D5EDC9256BE65DD3FF /* Pods_Tracker_TrackerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCD10C9F73B046EA0BCFB551 /* Pods_Tracker_TrackerUITests.framework */; };
 		8F278CDBB02B2865B451E382 /* Pods_TrackerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7731A8C8012584B974A675 /* Pods_TrackerTests.framework */; };
 		E42595E62CE4AAF600D77BEE /* TrackerCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E42595E42CE4AAF600D77BEE /* TrackerCoreData.xcdatamodeld */; };
@@ -103,6 +104,7 @@
 		33996DFD2CEB721500C9C990 /* OnboardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPage.swift; sourceTree = "<group>"; };
 		33996DFF2CEB72C200C9C990 /* FlagsAndSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagsAndSettings.swift; sourceTree = "<group>"; };
 		33996E022CEB747000C9C990 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		33ABDC1B2CF5CC17002CC236 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		54C4D660CB79142A6FA333F8 /* Pods-Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tracker.release.xcconfig"; path = "Target Support Files/Pods-Tracker/Pods-Tracker.release.xcconfig"; sourceTree = "<group>"; };
 		63C791D34D5C6D6177C15CC3 /* Pods_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		72246DA1479F9E9BC5D0D4EB /* Pods-Tracker-TrackerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tracker-TrackerUITests.release.xcconfig"; path = "Target Support Files/Pods-Tracker-TrackerUITests/Pods-Tracker-TrackerUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -298,6 +300,14 @@
 			path = TabBarController;
 			sourceTree = "<group>";
 		};
+		33ABDC1A2CF5CBF0002CC236 /* EditViewController */ = {
+			isa = PBXGroup;
+			children = (
+				33ABDC1B2CF5CC17002CC236 /* EditViewController.swift */,
+			);
+			path = EditViewController;
+			sourceTree = "<group>";
+		};
 		614C95F66ED8A0E452300956 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -346,6 +356,7 @@
 		E484D11F2C7B1AB900B43D86 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				33ABDC1A2CF5CBF0002CC236 /* EditViewController */,
 				330652C92CF0A6EF00CDC655 /* Resources */,
 				33996E012CEB745300C9C990 /* TabBarController */,
 				33996DF42CEB631F00C9C990 /* Onboarding */,
@@ -672,6 +683,7 @@
 				334CCE2A2CC7CA020013ED5A /* CategoryViewController.swift in Sources */,
 				334269922CDA28A10033762F /* TrackerCategoryStore.swift in Sources */,
 				334CCE2C2CC7CB120013ED5A /* CategoryTableViewCell.swift in Sources */,
+				33ABDC1C2CF5CC17002CC236 /* EditViewController.swift in Sources */,
 				E42595E62CE4AAF600D77BEE /* TrackerCoreData.xcdatamodeld in Sources */,
 				33996DF82CEB659B00C9C990 /* OnboardingViewController.swift in Sources */,
 				E484D1232C7B1AB900B43D86 /* SceneDelegate.swift in Sources */,
@@ -794,7 +806,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -858,7 +870,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -886,6 +898,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FP73RGLRL5;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -916,6 +929,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FP73RGLRL5;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

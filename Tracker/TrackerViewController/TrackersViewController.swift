@@ -12,6 +12,8 @@ import YandexMobileMetrica
 
 protocol TrackerCollectionViewCellDelegate: AnyObject {
     func buttonTapped(in cell: TrackerCollectionViewCell)
+    func confirmingDeletionAlert(alert: UIAlertController)
+    func showEditView(controller: UIViewController)
 }
 
 final class TrackersViewController: UIViewController {
@@ -203,10 +205,10 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc func textDidChange() {
-        if let searchText = searchField.text, !searchText.isEmpty {
-            filteredTrackers = visibleTrackers.compactMap { category in
+        if let searchText = searchTextField.text, !searchText.isEmpty {
+            filteredTrackers = visibleCategories.compactMap { category in
                 let filteredTrackers = category.trackers.filter { tracker in
-                    tracker.name.localizedCaseInsensitiveContains(searchText)
+                    tracker.title.localizedCaseInsensitiveContains(searchText)
                 }
                 
                 if !filteredTrackers.isEmpty {
@@ -216,7 +218,7 @@ final class TrackersViewController: UIViewController {
                 }
             }
         } else {
-            filteredTrackers = visibleTrackers
+            filteredTrackers = visibleCategories
         }
         collectionView.reloadData()
         showOrHideCollection()
@@ -287,9 +289,10 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         let tracker = filteredTrackers[indexPath.section].trackers[indexPath.row]
         
+        let categoryName = filteredTrackers[indexPath.section].title
         let completionCount = trackerRecordStore.getTrackerRecords(by: tracker.id).count
         let isCompleteToday = isTrackerCompleted(tracker, for: selectedDate)
-        cell.configure(id: tracker.id, title: tracker.title, color: tracker.color, emoji: tracker.emoji, completedDays: completionCount, isEnabled: true, isCompletedToday: isCompleteToday, indexPath: indexPath)
+        cell.configure(id: tracker.id, title: tracker.title, color: tracker.color, emoji: tracker.emoji, completedDays: completionCount, isEnabled: true, isCompletedToday: isCompleteToday, indexPath: indexPath, categoryName: categoryName, weekDays: tracker.schedule)
         cell.delegate = self
         return cell
     }
@@ -352,49 +355,12 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-//MARK: - UICollectionViewDelegate
-extension TrackerViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
-        guard indexPaths.count > 0 else {
-            return nil
-        }
-        
-        let indexPath = indexPaths[0]
-        let deleteCellString = NSLocalizedString("delete", comment: "text for contextMenu")
-        return UIContextMenuConfiguration(actionProvider: { actions in
-            return UIMenu(children: [
-                
-                UIAction(title: deleteCellString) { [weak self] _ in
-                    self?.confirmingDeletionAlert(indexForDelete: indexPath)
-                }
-            ])
-        })
-    }
-    
-    private func deleteCell(indexPath: IndexPath) {
-        //            let cell = collectionView.cellForItem(at: indexPath) as? TrackerCollectionViewCell
-        
-    }
-    
-    private func confirmingDeletionAlert(indexForDelete: IndexPath) {
-        let deleteCellString = NSLocalizedString("delete", comment: "text for delete button")
-        let abortString = NSLocalizedString("cancel", comment: "text for cancel button")
-        let titleForAlert = NSLocalizedString("delete.confirmation", comment: "Title for alert")
-        let alert = UIAlertController(title: titleForAlert, message: nil, preferredStyle: .actionSheet)
-        let deleteAction = UIAlertAction(title: deleteCellString, style: .destructive) { [weak self] _ in
-            self?.deleteCell(indexPath: indexForDelete)
-        }
-        let cancelAction = UIAlertAction(title: abortString, style: .cancel, handler: nil)
-        alert.addAction(deleteAction)
-        alert.addAction(cancelAction)
-        present(alert, animated: true)
-    }
-}
-
-
 //MARK: - TrackerCollectionViewCellDelegate
-
 extension TrackersViewController: TrackerCollectionViewCellDelegate {
+    func showEditView(controller: UIViewController) {
+        present(controller, animated: true)
+    }
+    
     func buttonTapped(in cell: TrackerCollectionViewCell) {
         let currentDate = Calendar.current.startOfDay(for: Date())
         let datePickerDate = Calendar.current.startOfDay(for: datePicker.date)
@@ -425,6 +391,10 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
         } catch {
             print("Error updating tracker state: \(error)")
         }
+    }
+    
+    func confirmingDeletionAlert(alert: UIAlertController) {
+        present(alert, animated: true)
     }
 }
 

@@ -21,6 +21,8 @@ final class CategoryViewModel {
         }
     }
     
+    var pickCategory = ""
+    
     var updateTableViewClosure: (() -> Void)?
     
     init() {

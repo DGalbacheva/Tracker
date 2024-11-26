@@ -250,12 +250,12 @@ extension HabitOrEventViewController: UITableViewDataSource {
         let text = rowsForTableView[indexPath.row]
         cell.configureNameLable(textNameLable: text)
         if indexPath.row == 0 {
-            cell.configureDescriptionLable(textDescriptionLable: categoryForTracker)
+            cell.configureDescriptionLabel(textDescriptionLabel: categoryForTracker)
         } else if trackerType == .habit && indexPath.row == 1 {
             if weekDaysArrayForTracker.count == 7 {
-                cell.configureDescriptionLable(textDescriptionLable: "Каждый день")
+                cell.configureDescriptionLabel(textDescriptionLabel: "Каждый день")
             } else {
-                cell.configureDescriptionLable(textDescriptionLable: weekdaysForTracker)
+                cell.configureDescriptionLabel(textDescriptionLabel: weekdaysForTracker)
             }
         }
         cell.backgroundColor = .backgroundDay

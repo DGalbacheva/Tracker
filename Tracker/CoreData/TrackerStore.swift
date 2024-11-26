@@ -109,18 +109,94 @@ final class TrackerStore {
         for i in trackersFromDB {
             if let newTracker = createTracker(from: i) {
                 trackersArray.append(newTracker)
-                print("""
-                            \(newTracker.title)
-                            \(newTracker.emoji)
-                            \(newTracker.id)
-                            \(newTracker.schedule)
-                            \(newTracker.color)
-                          """)
             } else {
                 print("Failed to create tracker from TrackerCD")
             }
         }
         return trackersArray
+    }
+    
+    func deleteTracker(id: UUID) {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        
+        do {
+            if let tracker = try context.fetch(request).first {
+                context.delete(tracker)
+                try context.save()
+            }
+        } catch {
+            print("🟥 \(error.localizedDescription)")
+        }
+    }
+    
+    func pinTracker(id: UUID) {
+        let categoryName = "Закрепленные"
+        let fetchRequest = NSFetchRequest<TrackerCategoryCD>(entityName: "TrackerCategoryCD")
+        fetchRequest.predicate = NSPredicate(format: "title == %@", categoryName)
+        var categories: [TrackerCategoryCD] = []
+        do {
+            categories = try context.fetch(fetchRequest)
+        } catch {
+            print("You could not request categories")
+        }
+        
+        let category: TrackerCategoryCD
+        if let existingCategory = categories.first {
+            category = existingCategory
+        } else {
+            category = TrackerCategoryCD(context: context)
+            category.title = categoryName
+        }
+        
+        let request = self.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        
+        do {
+            if let tracker = try context.fetch(request).first {
+                tracker.originalCategory = tracker.category?.title
+                tracker.category = category
+                category.addToTrackers(tracker)
+                try context.save()
+            }
+        } catch {
+            print("🟥 \(error.localizedDescription)")
+        }
+    }
+    
+    func unpinTracker(id: UUID) {
+        let request = self.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        do {
+            if let tracker = try context.fetch(request).first {
+                
+                tracker.category?.removeFromTrackers(tracker)
+                
+                if let originalCategory = tracker.originalCategory {
+                    
+                    let fetchRequest = NSFetchRequest<TrackerCategoryCD>(entityName: "TrackerCategoryCD")
+                    fetchRequest.predicate = NSPredicate(format: "title == %@", originalCategory)
+                    var categories: [TrackerCategoryCD] = []
+                    
+                    do {
+                        categories = try context.fetch(fetchRequest)
+                    } catch {
+                        print("Failed to request categories")
+                    }
+                    
+                    let category: TrackerCategoryCD
+                    if let existingCategory = categories.first {
+                        category = existingCategory
+                    } else {
+                        category = TrackerCategoryCD(context: context)
+                        category.title = originalCategory
+                    }
+                    category.addToTrackers(tracker)
+                }
+            }
+        } catch {
+            print("Could not find tracker by ID")
+        }
     }
 }
 
