@@ -67,6 +67,40 @@ final class CoreDataManager: NSObject {
         
     }
     
+    func configureFetchedResultsController(for identifiers: [UUID]) {
+        let fetchRequest = NSFetchRequest<TrackerCD>(entityName: "TrackerCD")
+        
+        fetchRequest.predicate = NSPredicate(format: "id IN %@", identifiers)
+        
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "category.title", ascending: true)]
+        
+        if fetchedResultsController == nil {
+            print("FRC nil")
+            fetchedResultsController = NSFetchedResultsController(
+                fetchRequest: fetchRequest,
+                managedObjectContext: context,
+                sectionNameKeyPath: "category.title",
+                cacheName: nil
+            )
+            fetchedResultsController.delegate = self
+        } else {
+            print("FRC not nil")
+            fetchedResultsController.fetchRequest.predicate = fetchRequest.predicate
+        }
+        
+        do {
+            try fetchedResultsController.performFetch()
+            print("Loading Trackers")
+            
+            if let fetchedObjects = fetchedResultsController.fetchedObjects {
+                let trackerCategories = convertToTrackerCategories(fetchedObjects)
+                pinCategory(array: trackerCategories)
+            }
+        } catch {
+            print("Error executing the request: \(error)")
+        }
+    }
+    
     private func createTracker(from trackerCD: TrackerCD) -> Tracker? {
         guard let trackerID = trackerCD.id,
               let trackerTitle = trackerCD.title,

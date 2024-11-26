@@ -34,6 +34,7 @@ final class TrackersViewController: UIViewController {
     private var filteredTrackers: [TrackerCategory] = []
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private lazy var filtersButton = UIButton()
     
     private lazy var datePicker = UIDatePicker()
     private lazy var mainLabel = UILabel()
@@ -56,6 +57,7 @@ final class TrackersViewController: UIViewController {
         filteredTrackers = visibleCategories
         
         addSubViews()
+        trackerRecordStore.removeAllTrackerRecords()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -165,19 +167,40 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
+    private func addFiltersButton() {
+        filtersButton.backgroundColor = .ypBlue
+        let textForButton = NSLocalizedString("filters", comment: "Текст для кнопки Фильтры")
+        filtersButton.setTitle(textForButton, for: .normal)
+        filtersButton.setTitleColor(.white, for: .normal)
+        filtersButton.layer.masksToBounds = true
+        filtersButton.layer.cornerRadius = 16
+        filtersButton.translatesAutoresizingMaskIntoConstraints = false
+        filtersButton.addTarget(self, action: #selector(filtersButtonPress), for: .touchUpInside)
+        view.addSubview(filtersButton)
+        
+        NSLayoutConstraint.activate([
+            filtersButton.heightAnchor.constraint(equalToConstant: 50),
+            filtersButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 131),
+            filtersButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -130),
+            filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+        ])
+    }
+    
     private func addCollectionView() {
         
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        
+        let buttonHeight: CGFloat = 50
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: buttonHeight + 16, right: 0)
+        collectionView.scrollIndicatorInsets = collectionView.contentInset
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 10),
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -192,6 +215,7 @@ final class TrackersViewController: UIViewController {
         addPlaceholderImage()
         addPlaceholderLabel()
         addCollectionView()
+        addFiltersButton()
     }
     
     //MARK: - Button Action
@@ -224,12 +248,33 @@ final class TrackersViewController: UIViewController {
         showOrHideCollection()
     }
     
+    @objc private func filtersButtonPress() {
+        analyticsService.report(event: "click", params: ["screen": "Main", "item": "filter"])
+        
+        if let savedFilterRawValue = UserDefaults.standard.string(forKey: "pickedFilter"),
+           let savedFilter = FiltersCases(rawValue: savedFilterRawValue) {
+            let vc = FiltersViewController(filter: savedFilter)
+            vc.delegate = self
+            present(vc, animated: true)
+        } else {
+            let vc = FiltersViewController(filter: nil)
+            vc.delegate = self
+            present(vc, animated: true)
+        }
+    }
+    
     //MARK: - Date Picker Actions
     
     //Filter the VisibleCategories array by weekday.numberValue when the date changes
     @objc func dateChanged(_ sender: UIDatePicker) {
         selectedDate = sender.date
         coreDataManager.configureFetchedResultsController(for: WeekDay.fromDate(selectedDate))
+        if let savedFilterRawValue = UserDefaults.standard.string(forKey: "pickedFilter"),
+           let savedFilter = FiltersCases(rawValue: savedFilterRawValue) {
+            filterTrackers(whith: savedFilter)
+        }
+        
+        
     }
     
     //MARK: - Helper Methods
@@ -237,8 +282,45 @@ final class TrackersViewController: UIViewController {
     private func showOrHideCollection() {
         if filteredTrackers.isEmpty {
             collectionView.isHidden = true
+            var isFilterPicked: Bool = false
+            if let savedFilterRawValue = UserDefaults.standard.string(forKey: "pickedFilter"),
+               let savedFilter = FiltersCases(rawValue: savedFilterRawValue) {
+                isFilterPicked = true
+            }
+            let isSearchTextEmpty = !(searchTextField.text?.isEmpty ?? true)
+            
+            if isFilterPicked || isSearchTextEmpty {
+                placeholderLabel.text = "Ничего не найдено"
+                placeholderImage.image = UIImage(named: "SearchError")
+            } else {
+                let textForLabel = NSLocalizedString("emptyState.title", comment: "Текст для заглушки")
+                placeholderLabel.text = textForLabel
+                placeholderImage.image = UIImage(named: "EmptyCollectionIcon")
+            }
+            if isFilterPicked {
+                filtersButton.isHidden = true
+            } else {
+                filtersButton.isHidden = false
+            }
         } else {
             collectionView.isHidden = false
+        }
+    }
+    
+    private func filterTrackers(whith: FiltersCases) {
+        switch whith {
+        case .allTrackers:
+            coreDataManager.configureFetchedResultsController(for: WeekDay.fromDate(selectedDate))
+        case .trackersOnToday:
+            coreDataManager.configureFetchedResultsController(for: WeekDay.fromDate(Date()))
+            datePicker.setDate(Date(), animated: true)
+            selectedDate = Date()
+        case .completedTrackers:
+            let trackersID = trackerRecordStore.fetchCompletedTrackersID(for: selectedDate)
+            coreDataManager.configureFetchedResultsController(for: trackersID)
+        case .unCompletedTrackers:
+            let trackersID = trackerRecordStore.fetchIncompleteTrackers(for: selectedDate, weekDay: WeekDay.fromDate(selectedDate))
+            coreDataManager.configureFetchedResultsController(for: trackersID)
         }
     }
     
@@ -407,6 +489,13 @@ extension TrackersViewController: CoreDataManagerDelegate {
         textDidChange()
         showOrHideCollection()
         collectionView.reloadData()
+    }
+}
+
+extension TrackersViewController: FilterViewControllerProtocol {
+    func saveChoise(filter: FiltersCases) {
+        UserDefaults.standard.set(filter.rawValue, forKey: "pickedFilter")
+        filterTrackers(whith: filter)
     }
 }
 

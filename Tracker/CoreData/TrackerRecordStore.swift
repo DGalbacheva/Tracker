@@ -118,5 +118,50 @@ final class TrackerRecordStore {
             return []
         }
     }
+    
+    func fetchCompletedTrackersID(for date: Date) -> [UUID] {
+        let fetchRequest = fetchRequest()
+        let startOfDay = Calendar.current.startOfDay(for: date)
+        fetchRequest.predicate = NSPredicate(format: "date == %@", startOfDay as NSDate)
+        
+        do {
+            let completedRecords = try context.fetch(fetchRequest)
+            
+            let trackersID = completedRecords.compactMap { $0.trackerId }
+            return trackersID
+        } catch {
+            print("Error getting executed trackers: \(error)")
+            return []
+        }
+    }
+    
+    func fetchIncompleteTrackers(for date: Date, weekDay: String) -> [UUID] {
+        let allTrackers = fetchAllTrackers(for: weekDay)
+        let completedTrackerIDs = fetchCompletedTrackersID(for: date)
+        let incompleteTrackerIDs = allTrackers.compactMap { tracker -> UUID? in
+            guard let trackerID = tracker.id else {
+                
+                return nil
+            }
+            return completedTrackerIDs.contains(trackerID) ? nil : trackerID
+            
+        }
+        return incompleteTrackerIDs
+    }
+    
+    private func fetchAllTrackers(for date: String) -> [TrackerCD] {
+        let fetchRequest = NSFetchRequest<TrackerCD>(entityName: "TrackerCD")
+        
+        fetchRequest.predicate = NSPredicate(format: "schedule CONTAINS %@", date)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "category.title", ascending: true)]
+        
+        do {
+            return try context.fetch(fetchRequest)
+        } catch {
+            print("Error receiving trackers: \(error)")
+            
+            return []
+        }
+    }
 }
 
