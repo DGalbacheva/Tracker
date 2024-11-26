@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import YandexMobileMetrica
+//import YandexMobileMetrica
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

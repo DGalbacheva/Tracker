@@ -22,6 +22,7 @@ final class TabBarViewController: UITabBarController {
         let statsViewController = StatsViewController()
         statsViewController.tabBarItem.image = UIImage(named: "TabBarStatsIcon")
         statsViewController.tabBarItem.title = nameForStatistics
+        trackersViewController.delegate = statsViewController
         
         self.viewControllers = [navigationController, statsViewController]
         addSeparatorLine()

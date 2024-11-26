@@ -10,6 +10,10 @@
 import UIKit
 import YandexMobileMetrica
 
+protocol TrackerViewControllerDelegateForStatistic: AnyObject {
+    func whatsShow(days: Int)
+}
+
 protocol TrackerCollectionViewCellDelegate: AnyObject {
     func buttonTapped(in cell: TrackerCollectionViewCell)
     func confirmingDeletionAlert(alert: UIAlertController)
@@ -24,6 +28,8 @@ final class TrackersViewController: UIViewController {
     private let trackerCategoryStore = TrackerCategoryStore()
     private let trackerRecordStore = TrackerRecordStore()
     private let analyticsService = AnalyticsService()
+    
+    var delegate: TrackerViewControllerDelegateForStatistic?
     
     private let currentDate: Date = Date()
     private var selectedDate: Date = Date()
@@ -284,7 +290,7 @@ final class TrackersViewController: UIViewController {
             collectionView.isHidden = true
             var isFilterPicked: Bool = false
             if let savedFilterRawValue = UserDefaults.standard.string(forKey: "pickedFilter"),
-               let savedFilter = FiltersCases(rawValue: savedFilterRawValue) {
+               let _ = FiltersCases(rawValue: savedFilterRawValue) {
                 isFilterPicked = true
             }
             let isSearchTextEmpty = !(searchTextField.text?.isEmpty ?? true)
@@ -472,6 +478,12 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
             collectionView.reloadItems(at: [indexPath])
         } catch {
             print("Error updating tracker state: \(error)")
+        }
+        
+        delegate?.whatsShow(days: trackerRecordStore.getAllTrackerRecords().count)
+        if let savedFilterRawValue = UserDefaults.standard.string(forKey: "pickedFilter"),
+           let savedFilter = FiltersCases(rawValue: savedFilterRawValue) {
+            filterTrackers(whith: savedFilter)
         }
     }
     
