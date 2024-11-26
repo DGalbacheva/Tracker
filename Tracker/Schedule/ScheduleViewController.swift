@@ -141,6 +141,7 @@ extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
         }
         cell.backgroundColor = .backgroundDay
         cell.delegate = self
+        cell.selectionStyle = .none
         updatedoneButtonnState()
         return cell
     }

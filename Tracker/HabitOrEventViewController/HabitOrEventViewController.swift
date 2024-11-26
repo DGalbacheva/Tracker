@@ -163,13 +163,13 @@ final class HabitOrEventViewController: UIViewController {
             cancelButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             cancelButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
-            cancelButton.widthAnchor.constraint(equalToConstant: 160),
+            cancelButton.trailingAnchor.constraint(equalTo: createButton.leadingAnchor, constant: -8),
             cancelButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             createButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             createButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
             createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.widthAnchor.constraint(equalToConstant: 160),
+            createButton.widthAnchor.constraint(equalToConstant: 165),
             createButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
@@ -225,6 +225,7 @@ extension HabitOrEventViewController: UITableViewDelegate {
         if indexPath.row == 0 {
             let viewModel = CategoryViewModel()
             viewModel.delegate = self
+            viewModel.pickCategory = categoryForTracker
             let viewController = CategoryViewController(categoryViewModel: viewModel)
             present(viewController, animated: true)
         } else if trackerType == .habit && indexPath.row == 1 {
@@ -253,12 +254,15 @@ extension HabitOrEventViewController: UITableViewDataSource {
             cell.configureDescriptionLabel(textDescriptionLabel: categoryForTracker)
         } else if trackerType == .habit && indexPath.row == 1 {
             if weekDaysArrayForTracker.count == 7 {
+                cell.descriptionLabelIsEmpty = categoryForTracker.isEmpty
                 cell.configureDescriptionLabel(textDescriptionLabel: "Каждый день")
             } else {
+                cell.descriptionLabelIsEmpty = weekdaysForTracker.isEmpty
                 cell.configureDescriptionLabel(textDescriptionLabel: weekdaysForTracker)
             }
         }
         cell.backgroundColor = .backgroundDay
+        cell.selectionStyle = .none
         return cell
     }
 }

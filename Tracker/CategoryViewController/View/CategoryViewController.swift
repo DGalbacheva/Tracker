@@ -151,8 +151,12 @@ extension CategoryViewController: UITableViewDataSource {
         }
         
         let category = categoryViewModel.categories[indexPath.row]
+        if categoryViewModel.pickCategory == category {
+            cell.showOrHideDoneImg()
+        }
         cell.configureCell(textLable: category)
         cell.backgroundColor = .backgroundDay
+        cell.selectionStyle = .none
         return cell
     }
     

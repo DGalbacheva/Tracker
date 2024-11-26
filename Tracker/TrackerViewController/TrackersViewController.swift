@@ -59,11 +59,10 @@ final class TrackersViewController: UIViewController {
         
         coreDataManager.delegate = self
         coreDataManager.configureFetchedResultsController(for: WeekDay.fromDate(selectedDate))
-        showOrHideCollection()
+        showOrHideViews()
         filteredTrackers = visibleCategories
         
         addSubViews()
-        trackerRecordStore.removeAllTrackerRecords()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -251,7 +250,7 @@ final class TrackersViewController: UIViewController {
             filteredTrackers = visibleCategories
         }
         collectionView.reloadData()
-        showOrHideCollection()
+        showOrHideViews()
     }
     
     @objc private func filtersButtonPress() {
@@ -277,23 +276,30 @@ final class TrackersViewController: UIViewController {
         coreDataManager.configureFetchedResultsController(for: WeekDay.fromDate(selectedDate))
         if let savedFilterRawValue = UserDefaults.standard.string(forKey: "pickedFilter"),
            let savedFilter = FiltersCases(rawValue: savedFilterRawValue) {
+            if savedFilter.self == .trackersOnToday {
+                UserDefaults.standard.set(FiltersCases.allTrackers.rawValue, forKey: "pickedFilter")
+                filterTrackers(whith: .allTrackers)
+                return
+            }
             filterTrackers(whith: savedFilter)
         }
-        
-        
     }
     
     //MARK: - Helper Methods
     
-    private func showOrHideCollection() {
+    private func showOrHideViews() {
+        var isFilterPicked: Bool = false
         if filteredTrackers.isEmpty {
             collectionView.isHidden = true
-            var isFilterPicked: Bool = false
-            if let savedFilterRawValue = UserDefaults.standard.string(forKey: "pickedFilter"),
-               let _ = FiltersCases(rawValue: savedFilterRawValue) {
-                isFilterPicked = true
-            }
+            filtersButton.isHidden = true
+        
             let isSearchTextEmpty = !(searchTextField.text?.isEmpty ?? true)
+            
+            if let savedFilterRawValue = UserDefaults.standard.string(forKey: "pickedFilter"), let _ = FiltersCases(rawValue: savedFilterRawValue) {
+                isFilterPicked = true
+            } else {
+                isFilterPicked = false
+            }
             
             if isFilterPicked || isSearchTextEmpty {
                 placeholderLabel.text = "Ничего не найдено"
@@ -303,13 +309,12 @@ final class TrackersViewController: UIViewController {
                 placeholderLabel.text = textForLabel
                 placeholderImage.image = UIImage(named: "EmptyCollectionIcon")
             }
-            if isFilterPicked {
-                filtersButton.isHidden = true
-            } else {
-                filtersButton.isHidden = false
-            }
         } else {
             collectionView.isHidden = false
+            filtersButton.isHidden = false
+        }
+        if isFilterPicked {
+            filtersButton.isHidden = false
         }
     }
     
@@ -397,7 +402,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         }
         
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? SectionHeader else {
-            assertionFailure("Invalid element type for SupplementaryElement")
+            assertionFailure("Invalid element type for SectionHeader")
             return UICollectionReusableView()
         }
         view.titleLabel.text = filteredTrackers[indexPath.section].title
@@ -444,6 +449,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 }
 
 //MARK: - TrackerCollectionViewCellDelegate
+
 extension TrackersViewController: TrackerCollectionViewCellDelegate {
     func showEditView(controller: UIViewController) {
         present(controller, animated: true)
@@ -453,9 +459,6 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
         let currentDate = Calendar.current.startOfDay(for: Date())
         let datePickerDate = Calendar.current.startOfDay(for: datePicker.date)
         
-        //Storing the date selected in the calendar on this screen
-        //And comparing these two dates here, if the selected date is greater
-        //Than the current one, then don't call the code below
         if currentDate < datePickerDate {
             let alertController = UIAlertController(title: "Ой! Мы в будущем",
                                                     message: "Невозможно отметить этой датой",
@@ -475,7 +478,6 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
             } else {
                 try trackerRecordStore.addTrackerRecord(trackerId: tracker.id, date: selectedDate)
             }
-            collectionView.reloadItems(at: [indexPath])
         } catch {
             print("Error updating tracker state: \(error)")
         }
@@ -499,10 +501,12 @@ extension TrackersViewController: CoreDataManagerDelegate {
         visibleCategories = data
         filteredTrackers = data
         textDidChange()
-        showOrHideCollection()
+        showOrHideViews()
         collectionView.reloadData()
     }
 }
+
+//MARK: - FilterViewControllerProtocol
 
 extension TrackersViewController: FilterViewControllerProtocol {
     func saveChoise(filter: FiltersCases) {

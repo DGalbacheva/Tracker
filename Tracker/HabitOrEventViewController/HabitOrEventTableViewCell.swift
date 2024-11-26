@@ -34,7 +34,7 @@ final class HabitOrEventTableViewСеll: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureSubviews() {
+    private func configureSubviews() {
         nameLable.font = .systemFont(ofSize: 17, weight: .regular)
         nameLable.textColor = .blackDay
         
@@ -52,6 +52,9 @@ final class HabitOrEventTableViewСеll: UITableViewCell {
         let heightCell = contentView.heightAnchor.constraint(equalToConstant: 75)
         heightCell.priority = .defaultHigh
         
+        nameLabelCenterYConstraint = nameLable.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        descriptionLabelTopConstraint = descriptionLabel.topAnchor.constraint(equalTo: nameLable.bottomAnchor, constant: 4)
+        
         NSLayoutConstraint.activate([
             heightCell,
             chevronImg.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
@@ -60,12 +63,10 @@ final class HabitOrEventTableViewСеll: UITableViewCell {
             chevronImg.widthAnchor.constraint(equalToConstant: 24),
             
             nameLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameLable.heightAnchor.constraint(equalToConstant: 24),
             nameLable.trailingAnchor.constraint(equalTo: chevronImg.leadingAnchor),
             nameLable.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
             
             descriptionLabel.leadingAnchor.constraint(equalTo: nameLable.leadingAnchor),
-            descriptionLabel.topAnchor.constraint(equalTo: nameLable.bottomAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: nameLable.trailingAnchor),
             descriptionLabel.heightAnchor.constraint(equalToConstant: 22)
         ])
