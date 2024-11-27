@@ -8,12 +8,16 @@
 import UIKit
 
 final class HabitOrEventCollectionViewCell: UICollectionViewCell {
+    
+    //MARK: - Properties
 
     static let identifier = "HabitOrEventCollectionViewCell"
     
     private lazy var emojiLabel = UILabel()
     private lazy var colorView = UIView()
     private lazy var backView = UIView()
+    
+    //MARK: - Lifecycle Methods
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,6 +30,8 @@ final class HabitOrEventCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    //MARK: - UI Setup Methods
+    
     private func addSubviewsAndConstraints() {
         backView.backgroundColor = .whiteDay
         backView.layer.masksToBounds = true
@@ -48,7 +54,6 @@ final class HabitOrEventCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(backView)
         backView.addSubview(colorView)
         backView.addSubview(emojiLabel)
-
 
         NSLayoutConstraint.activate([
             backView.heightAnchor.constraint(equalToConstant: 46),

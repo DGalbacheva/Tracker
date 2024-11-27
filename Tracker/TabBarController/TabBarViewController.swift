@@ -10,6 +10,7 @@ import UIKit
 final class TabBarViewController: UITabBarController {
     let nameForTrackers = NSLocalizedString("trackers", comment: "Название вкладки трекеров")
     let nameForStatistics = NSLocalizedString("statistics", comment: "Название вкладки статистики")
+    private var separator: CALayer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,13 +26,22 @@ final class TabBarViewController: UITabBarController {
         trackersViewController.delegate = statsViewController
         
         self.viewControllers = [navigationController, statsViewController]
-        addSeparatorLine()
     }
     
     private func addSeparatorLine() {
-        let separator = CALayer()
-        separator.frame = CGRect(x: 0, y: 0, width: tabBar.bounds.width, height: 1)
-        separator.backgroundColor = UIColor.ypLightGray.cgColor
-        tabBar.layer.addSublayer(separator)
+        if separator == nil {
+            separator = CALayer()
+            separator?.frame = CGRect(x: 0, y: 0, width: tabBar.bounds.width, height: 1)
+            tabBar.layer.addSublayer(separator!)
+        }
+        separator?.backgroundColor = UIColor.ypSeparatorForTabBar.cgColor
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            addSeparatorLine()
+        }
     }
 }

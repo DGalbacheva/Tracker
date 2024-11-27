@@ -9,6 +9,8 @@ import UIKit
 
 final class FiltersTableViewCell: UITableViewCell {
     
+    //MARK: - Properties
+    
     static let identifier = "FiltersTableViewCell"
     
     private lazy var doneImg: UIImageView = {
@@ -26,14 +28,17 @@ final class FiltersTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - Lifecycle Methods
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         layer.cornerRadius = 0
         layer.masksToBounds = false
     }
     
+    //MARK: - UI Setup Methods
+    
     private func configureSubviews() {
-        
         doneImg.isHidden = true
         
         categoryLable.translatesAutoresizingMaskIntoConstraints = false
@@ -58,6 +63,8 @@ final class FiltersTableViewCell: UITableViewCell {
         ])
     }
     
+    //MARK: - Methods
+    
     func configureCell(textLable: String) {
         prepareForReuse()
         categoryLable.text = textLable
@@ -72,4 +79,3 @@ final class FiltersTableViewCell: UITableViewCell {
         return text
     }
 }
-

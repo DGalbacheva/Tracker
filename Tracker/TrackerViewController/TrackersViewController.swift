@@ -78,16 +78,17 @@ final class TrackersViewController: UIViewController {
     //MARK: - UI Setup Methods
     
     private func addPlusButton() {
-        let image = UIImage(named: "AddTrackerIcon")
-        plusButton.setImage(image, for: .normal)
+        let plusButton = UIBarButtonItem(image: UIImage(named: "AddTrackerIcon"), style: .plain, target: self, action: #selector(Self.addButtonTapped))
+        //plusButton.setImage(image, for: .normal)
         plusButton.tintColor = .blackDay
-        plusButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: plusButton)
+        //plusButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+        navigationItem.leftBarButtonItem = plusButton
     }
     
     private func addDatePicker() {
         datePicker.datePickerMode  =  .date
         datePicker.locale = .current
+        datePicker.backgroundColor = .whiteDay
         datePicker.preferredDatePickerStyle = .compact
         datePicker.widthAnchor.constraint(equalToConstant: 100).isActive = true
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
@@ -115,8 +116,15 @@ final class TrackersViewController: UIViewController {
         searchTextField.layer.cornerRadius = 15
         searchTextField.font = .systemFont(ofSize: 17, weight: .regular)
         searchTextField.textAlignment = .left
+        searchTextField.textColor = .ypColorForSearchField
+        searchTextField.tintColor = .ypColorForSearchField
         let textForPlaceholder = NSLocalizedString("search", comment: "Текст для UITextField")
-        searchTextField.placeholder = textForPlaceholder
+        //searchTextField.placeholder = textForPlaceholder
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.ypColorForSearchField,
+            .font: UIFont.systemFont(ofSize: 17, weight: .regular)
+        ]
+        searchTextField.attributedPlaceholder = NSAttributedString(string: textForPlaceholder, attributes: attributes)
         let searchIcon = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         searchIcon.tintColor = .gray
         searchIcon.frame = CGRect(x: 8, y: 0, width: 16, height: 16)
@@ -192,9 +200,9 @@ final class TrackersViewController: UIViewController {
     }
     
     private func addCollectionView() {
-        
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.backgroundColor = .whiteDay
         collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         let buttonHeight: CGFloat = 50
@@ -213,6 +221,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private func addSubViews() {
+        view.backgroundColor = .whiteDay
         addPlusButton()
         addDatePicker()
         addMainLabel()
@@ -225,7 +234,6 @@ final class TrackersViewController: UIViewController {
     
     //MARK: - Button Action
     
-    //Set the click on the + button in the navbar
     @objc private func addButtonTapped() {
         analyticsService.report(event: "click", params: ["screen": "Main", "item": "add_tracker"])
         let modalVC = TrackerTypeSelectionViewController()
@@ -270,7 +278,6 @@ final class TrackersViewController: UIViewController {
     
     //MARK: - Date Picker Actions
     
-    //Filter the VisibleCategories array by weekday.numberValue when the date changes
     @objc func dateChanged(_ sender: UIDatePicker) {
         selectedDate = sender.date
         coreDataManager.configureFetchedResultsController(for: WeekDay.fromDate(selectedDate))
@@ -342,7 +349,6 @@ final class TrackersViewController: UIViewController {
         return WeekDay.allCases.first { $0.calendarDayNumber == weekday }
     }
     
-    //Checking wether the tracker is completed today using the ID
     func isTrackerCompleted(_ tracker: Tracker, for date: Date) -> Bool {
         return trackerRecordStore.isTrackerCompleted(trackerId: tracker.id, date: date)
     }
@@ -362,17 +368,14 @@ extension TrackersViewController: UITextFieldDelegate {
 //MARK: - UICollectionViewDataSource
 
 extension TrackersViewController: UICollectionViewDataSource {
-    //Returning the number of sections to the collection
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return filteredTrackers.count
     }
     
-    //Return the number of elements in the section to the collection
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         filteredTrackers[section].trackers.count
     }
     
-    //Creating a cell to display on the screen
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCollectionViewCell
         else {
@@ -422,7 +425,6 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         
     }
     
-    //Setting the size of each element (cell) in the collection
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -431,12 +433,10 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         return 10
     }
     
-    //Setting indents for the entire section
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 16.0)
     }
     
-    //Header height
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let indexPath = IndexPath(row: 0, section: section)
         let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)

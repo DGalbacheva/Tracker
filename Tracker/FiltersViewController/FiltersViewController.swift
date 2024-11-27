@@ -12,6 +12,9 @@ protocol FilterViewControllerProtocol: AnyObject {
 }
 
 final class FiltersViewController: UIViewController {
+    
+    //MARK: - Properties
+    
     weak var delegate: FilterViewControllerProtocol?
     
     private let rowsForTableView: [FiltersCases] = [.allTrackers, .trackersOnToday, .completedTrackers, .unCompletedTrackers]
@@ -30,6 +33,8 @@ final class FiltersViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - Lifecycle Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .whiteDay
@@ -37,6 +42,8 @@ final class FiltersViewController: UIViewController {
         categoryTableView.delegate = self
         configureSubviews()
     }
+    
+    //MARK: - UI Setup Methods
     
     private func configureSubviews() {
         titleLable.text = "Фильтры"
@@ -71,6 +78,8 @@ final class FiltersViewController: UIViewController {
     }
 }
 
+//MARK: - UITableViewDelegate
+
 extension FiltersViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -86,6 +95,8 @@ extension FiltersViewController: UITableViewDelegate {
         dismiss(animated: true)
     }
 }
+
+//MARK: - UITableViewDataSource
 
 extension FiltersViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -132,7 +143,3 @@ extension FiltersViewController: UITableViewDataSource {
         }
     }
 }
-
-
-
-

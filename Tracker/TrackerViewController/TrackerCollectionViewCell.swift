@@ -29,24 +29,21 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     //MARK: - UI Elements
     
-    //Top part
     private var upperView: UIView = {
         let view = UIView()
-        view.backgroundColor = .colorSet14
+        //view.backgroundColor = .colorSet14
         view.layer.cornerRadius = 10
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    //Bottom part
     private var lowerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .whiteDay
+        //view.backgroundColor = .whiteDay
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    //Emoji
     private var emojiLabel: UILabel = {
         let label = UILabel()
         label.text = ""
@@ -56,19 +53,18 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    //Emoji UIView
     private var emojiBackgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.whiteDay.withAlphaComponent(0.3)
+        view.backgroundColor = .ypBackForSmile
+        //view.backgroundColor = UIColor.whiteDay.withAlphaComponent(0.3)
         view.layer.cornerRadius = 12
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    //LableText Tracker
     private var trackerText: UITextView = {
         let text = UITextView()
-        text.textColor = .whiteDay
+        text.textColor = .whiteForDiscription
         text.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         text.backgroundColor = .clear
         text.isScrollEnabled = false
@@ -78,7 +74,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return text
     }()
     
-    //Days counter
     private var dayCountLabel: UILabel = {
         let label = UILabel()
         label.textColor = .blackDay
@@ -87,22 +82,20 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    //Plus or Minus Button
     private var plusButton: UIButton = {
         let button = UIButton()
         let templateImage = UIImage(named: "PlusButton")?.withRenderingMode(.alwaysTemplate)
         button.setImage(templateImage, for: .normal)
+        button.tintColor = .whiteDay
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    //Image for the plus button under the tracker
     private var plusImage: UIImage = {
         let image = UIImage(named: "PlusButton")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
         return image
     }()
     
-    // Картинка для кнопки done под трекером
     private var doneImage: UIImage = {
         let image = UIImage(named: "DoneButton") ?? UIImage()
         return image
@@ -110,7 +103,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     //MARK: - UI Elements Layout
     
-    //Initializer for cell settings
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -123,9 +115,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
     
     private func addSubViewAndConstraints() {
-        // Cell color
         upperView.backgroundColor = .colorSet14
-        // Round ends of cells
         upperView.layer.cornerRadius = 16
         
         plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
@@ -177,7 +167,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         upperView.addInteraction(interaction)
     }
     
-    // Метод для "собирания" ячейки
     func configure(
         id:  UUID,
         title:  String,

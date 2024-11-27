@@ -12,7 +12,6 @@ protocol TrackerTypeSelectionViewControllerDelegate: AnyObject {
 }
 
 final class TrackerTypeSelectionViewController: UIViewController {
-   // weak var delegate: TrackerTypeSelectionViewControllerDelegate?
     private lazy var titleLabel = UILabel()
     private lazy var habitButton = UIButton()
     private lazy var eventButton = UIButton()

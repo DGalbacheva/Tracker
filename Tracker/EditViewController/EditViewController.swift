@@ -8,10 +8,14 @@
 import UIKit
 
 final class EditViewController: UIViewController {
+    
+    //MARK: - Properties
+    
     enum TrackerType {
         case habit
         case event
     }
+    
     private let marshalling = UIColorMarshalling()
     private let trackerStore = TrackerStore()
     var trackerType: TrackerType = .habit
@@ -33,6 +37,7 @@ final class EditViewController: UIViewController {
         }
         return string
     }
+    
     private let emojies = [ "🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝️", "😪"]
     
     private let colors: [UIColor] = [UIColor(resource: .colorSet1), UIColor(resource: .colorSet2), UIColor(resource: .colorSet3), UIColor(resource: .colorSet4), UIColor(resource: .colorSet5), UIColor(resource: .colorSet6), UIColor(resource: .colorSet7), UIColor(resource: .colorSet8), UIColor(resource: .colorSet9), UIColor(resource: .colorSet10), UIColor(resource: .colorSet11), UIColor(resource: .colorSet12), UIColor(resource: .colorSet13), UIColor(resource: .colorSet14), UIColor(resource: .colorSet15), UIColor(resource: .colorSet16), UIColor(resource: .colorSet17), UIColor(resource: .colorSet18)]
@@ -51,6 +56,8 @@ final class EditViewController: UIViewController {
         return trackerType == .habit ? ["Категория", "Расписание"] : ["Категория"]
     }
     
+    //MARK: - Lifecycle Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .whiteDay
@@ -58,6 +65,8 @@ final class EditViewController: UIViewController {
         trackerTableView.delegate = self
         configureSubviews()
     }
+    
+    //MARK: - UI Setup Methods
     
     func configureSubviews() {
         scrollView.alwaysBounceVertical = true
@@ -190,6 +199,8 @@ final class EditViewController: UIViewController {
         ])
     }
     
+    //MARK: - Actions
+    
     @objc private func editingChanged() {
         if let text = nameTrackerTextField.text, !text.isEmpty {
             textFieldIsEmpty = false
@@ -216,6 +227,8 @@ final class EditViewController: UIViewController {
             trackerStore.deleteTracker(id: id!)
         }
     }
+    
+    //MARK: - Methods
     
     func pickedEmojiAndColor(emoji: String, color: UIColor) {
         guard let emojiIndex = emojies.firstIndex(of: emoji) else {
@@ -250,6 +263,7 @@ final class EditViewController: UIViewController {
     }
 }
 //MARK: - UITextFieldDelegate
+
 extension EditViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -259,6 +273,7 @@ extension EditViewController: UITextFieldDelegate {
 }
 
 //MARK: - UITableViewDelegate
+
 extension EditViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
@@ -278,6 +293,7 @@ extension EditViewController: UITableViewDelegate {
 }
 
 // MARK: - UITableViewDataSource
+
 extension EditViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         rowsForTableView.count
@@ -309,6 +325,7 @@ extension EditViewController: UITableViewDataSource {
 }
 
 //MARK: - UICollectionViewDataSource
+
 extension EditViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         2
@@ -376,7 +393,8 @@ extension EditViewController: UICollectionViewDataSource {
     }
 }
 
-//MARK: UICollectionViewDelegateFlowLayout
+//MARK: - UICollectionViewDelegateFlowLayout
+
 extension EditViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 52, height: 52)
@@ -401,6 +419,8 @@ extension EditViewController: UICollectionViewDelegateFlowLayout {
                                                   verticalFittingPriority: .fittingSizeLevel)
     }
 }
+
+//MARK: - UICollectionViewDelegate
 
 extension EditViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -430,6 +450,8 @@ extension EditViewController: UICollectionViewDelegate {
     }
 }
 
+//MARK: - CategoryViewModelDelegate
+
 extension EditViewController: CategoryViewModelDelegate {
     func categoryIsPicked(category: String) {
         categoryForTracker = category
@@ -437,6 +459,8 @@ extension EditViewController: CategoryViewModelDelegate {
         updateCreateButtonState()
     }
 }
+
+//MARK: - ScheduleViewControllerDelegate
 
 extension EditViewController: ScheduleViewControllerDelegate {
     func weekdaysIsPicked(weekDaysArray: [WeekDay]) {

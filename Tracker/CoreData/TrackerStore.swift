@@ -158,6 +158,7 @@ final class TrackerStore {
                 tracker.category = category
                 category.addToTrackers(tracker)
                 try context.save()
+                
             }
         } catch {
             print("🟥 \(error.localizedDescription)")

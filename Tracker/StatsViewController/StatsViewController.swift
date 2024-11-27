@@ -10,6 +10,9 @@
 import UIKit
 
 final class StatsViewController: UIViewController, TrackerViewControllerDelegateForStatistic {
+    
+    //MARK: - Properties
+    
     private let trackerRecordStore = TrackerRecordStore()
     
     private var countDays: Int = 0
@@ -20,6 +23,8 @@ final class StatsViewController: UIViewController, TrackerViewControllerDelegate
     private lazy var holderForStatistic = UIView()
     private lazy var countLabel = UILabel()
     private lazy var descriptionLabel = UILabel()
+    
+    //MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()

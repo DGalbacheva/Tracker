@@ -13,6 +13,8 @@ final class HabitOrEventViewController: UIViewController {
         case event
     }
     
+    //MARK: - Properties
+    
     private let trackerStore = TrackerStore()
     
     var trackerType: TrackerType = .habit
@@ -49,6 +51,8 @@ final class HabitOrEventViewController: UIViewController {
         return trackerType == .habit ? ["Категория", "Расписание"] : ["Категория"]
     }
     
+    //MARK: - Lifecycle Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .whiteDay
@@ -56,6 +60,8 @@ final class HabitOrEventViewController: UIViewController {
         trackerTableView.delegate = self
         configureSubviews()
     }
+    
+    //MARK: - UI Setup Methods
     
     private func configureSubviews() {
         scrollView.alwaysBounceVertical = true
@@ -173,6 +179,7 @@ final class HabitOrEventViewController: UIViewController {
             createButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
+    //MARK: - Button Actions
     
     @objc private func editingChanged() {
         if let text = nameTrackerTextField.text, !text.isEmpty {
@@ -211,7 +218,8 @@ final class HabitOrEventViewController: UIViewController {
     }
 }
 
-//MARK: UITextFieldDelegate
+//MARK: - UITextFieldDelegate
+
 extension HabitOrEventViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -219,6 +227,8 @@ extension HabitOrEventViewController: UITextFieldDelegate {
         return false
     }
 }
+
+//MARK: - UITableViewDelegate
 
 extension HabitOrEventViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -237,6 +247,8 @@ extension HabitOrEventViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
+
+//MARK: - UITableViewDataSource
 
 extension HabitOrEventViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -266,6 +278,8 @@ extension HabitOrEventViewController: UITableViewDataSource {
         return cell
     }
 }
+
+//MARK: - UICollectionViewDataSource
 
 extension HabitOrEventViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -334,7 +348,8 @@ extension HabitOrEventViewController: UICollectionViewDataSource {
     }
 }
 
-//MARK: UICollectionViewDelegateFlowLayout
+//MARK: - UICollectionViewDelegateFlowLayout
+
 extension HabitOrEventViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 52, height: 52)
@@ -360,6 +375,8 @@ extension HabitOrEventViewController: UICollectionViewDelegateFlowLayout {
                                                   verticalFittingPriority: .fittingSizeLevel)
     }
 }
+
+//MARK: - UICollectionViewDelegate
 
 extension HabitOrEventViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -387,6 +404,8 @@ extension HabitOrEventViewController: UICollectionViewDelegate {
     }
 }
 
+//MARK: - CategoryViewModelDelegate
+
 extension HabitOrEventViewController: CategoryViewModelDelegate {
     func categoryIsPicked(category: String) {
         categoryForTracker = category
@@ -394,6 +413,8 @@ extension HabitOrEventViewController: CategoryViewModelDelegate {
         updateCreateButtonState()
     }
 }
+
+//MARK: - ScheduleViewControllerDelegate
 
 extension HabitOrEventViewController: ScheduleViewControllerDelegate {
     func weekdaysIsPicked(weekDaysArray: [WeekDay]) {

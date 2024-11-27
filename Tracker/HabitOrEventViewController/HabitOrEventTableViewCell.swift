@@ -9,6 +9,8 @@ import UIKit
 
 final class HabitOrEventTableViewСеll: UITableViewCell {
     
+    //MARK: - Properties
+    
     static let identifier = "HabitOrEventTableViewСеll"
     
     private lazy var chevronImg: UIImageView = {
@@ -25,6 +27,8 @@ final class HabitOrEventTableViewСеll: UITableViewCell {
         }
     }
     
+    //MARK: - Lifecycle Methods
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         configureSubviews()
@@ -33,6 +37,8 @@ final class HabitOrEventTableViewСеll: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: - UI Setup Methods
     
     private func configureSubviews() {
         nameLable.font = .systemFont(ofSize: 17, weight: .regular)
