@@ -10,6 +10,10 @@ import SnapshotTesting
 @testable import Tracker
 
 final class TrackerTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        SnapshotTesting.isRecording = false
+    }
 
     func testTrackerViewControllerForEmptyState() {
         let testVC = TrackersViewController()
