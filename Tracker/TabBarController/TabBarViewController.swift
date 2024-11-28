@@ -26,6 +26,8 @@ final class TabBarViewController: UITabBarController {
         trackersViewController.delegate = statsViewController
         
         self.viewControllers = [navigationController, statsViewController]
+        
+        addSeparatorLine()
     }
     
     private func addSeparatorLine() {
@@ -35,13 +37,5 @@ final class TabBarViewController: UITabBarController {
             tabBar.layer.addSublayer(separator!)
         }
         separator?.backgroundColor = UIColor.ypSeparatorForTabBar.cgColor
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            addSeparatorLine()
-        }
     }
 }

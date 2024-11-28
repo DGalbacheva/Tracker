@@ -84,21 +84,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     private var plusButton: UIButton = {
         let button = UIButton()
-        let templateImage = UIImage(named: "PlusButton")?.withRenderingMode(.alwaysTemplate)
-        button.setImage(templateImage, for: .normal)
+        button.layer.cornerRadius = 17
+        button.layer.masksToBounds = true
         button.tintColor = .whiteDay
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
-    }()
-    
-    private var plusImage: UIImage = {
-        let image = UIImage(named: "PlusButton")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
-        return image
-    }()
-    
-    private var doneImage: UIImage = {
-        let image = UIImage(named: "DoneButton") ?? UIImage()
-        return image
     }()
     
     //MARK: - UI Elements Layout
@@ -158,7 +148,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             dayCountLabel.leadingAnchor.constraint(equalTo: lowerView.leadingAnchor, constant: 10),
             
             plusButton.centerYAnchor.constraint(equalTo: lowerView.centerYAnchor),
-            plusButton.trailingAnchor.constraint(equalTo: lowerView.trailingAnchor, constant: -10),
+            plusButton.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -12),
+            plusButton.heightAnchor.constraint(equalToConstant: 34),
+            plusButton.widthAnchor.constraint(equalToConstant: 34)
         ])
     }
     
@@ -188,7 +180,14 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         self.countDays = completedDays
         
         upperView.backgroundColor = color
-        plusButton.tintColor = color
+        plusButton.backgroundColor = color
+        plusButton.alpha = isCompletedToday ? 0.3 : 1
+        if isCompletedToday {
+            plusButton.setImage(UIImage(named: "DoneButton"), for: .normal)
+        } else {
+            plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        }
+        
         trackerText.text = title
         emojiLabel.text = emoji
         
@@ -196,9 +195,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
             NSLocalizedString("numberOfTasks", comment: "подбор формы записи дня"),
             completedDays
         )
-        
-        let image = isCompletedToday ? doneImage : plusImage
-        plusButton.setImage(image, for: .normal)
     }
     
     func pinOrUnPinTracker(category: String) -> UIAction {

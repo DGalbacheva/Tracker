@@ -103,10 +103,8 @@
 		33ABDC222CF5F7DE002CC236 /* FiltersCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersCases.swift; sourceTree = "<group>"; };
 		54C4D660CB79142A6FA333F8 /* Pods-Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tracker.release.xcconfig"; path = "Target Support Files/Pods-Tracker/Pods-Tracker.release.xcconfig"; sourceTree = "<group>"; };
 		63C791D34D5C6D6177C15CC3 /* Pods_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		72246DA1479F9E9BC5D0D4EB /* Pods-Tracker-TrackerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tracker-TrackerUITests.release.xcconfig"; path = "Target Support Files/Pods-Tracker-TrackerUITests/Pods-Tracker-TrackerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8760D39EF588808B6659DA18 /* Pods-TrackerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrackerTests.release.xcconfig"; path = "Target Support Files/Pods-TrackerTests/Pods-TrackerTests.release.xcconfig"; sourceTree = "<group>"; };
 		8F7731A8C8012584B974A675 /* Pods_TrackerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrackerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CCD10C9F73B046EA0BCFB551 /* Pods_Tracker_TrackerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tracker_TrackerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB5998989361F0AE361E45BD /* Pods-TrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrackerTests.debug.xcconfig"; path = "Target Support Files/Pods-TrackerTests/Pods-TrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E42595E52CE4AAF600D77BEE /* TrackerCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerCoreData.xcdatamodel; sourceTree = "<group>"; };
 		E484D11D2C7B1AB900B43D86 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,7 +126,6 @@
 		E484D1672C7B203D00B43D86 /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		E484D1692C7B205100B43D86 /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
 		E484D16B2C7B207000B43D86 /* WeekDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDay.swift; sourceTree = "<group>"; };
-		E634E97CC5D86C6A8E82454D /* Pods-Tracker-TrackerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tracker-TrackerUITests.debug.xcconfig"; path = "Target Support Files/Pods-Tracker-TrackerUITests/Pods-Tracker-TrackerUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E840EB371FE4DC8D6BE8E00C /* Pods-Tracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tracker.debug.xcconfig"; path = "Target Support Files/Pods-Tracker/Pods-Tracker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -308,8 +305,6 @@
 			children = (
 				E840EB371FE4DC8D6BE8E00C /* Pods-Tracker.debug.xcconfig */,
 				54C4D660CB79142A6FA333F8 /* Pods-Tracker.release.xcconfig */,
-				E634E97CC5D86C6A8E82454D /* Pods-Tracker-TrackerUITests.debug.xcconfig */,
-				72246DA1479F9E9BC5D0D4EB /* Pods-Tracker-TrackerUITests.release.xcconfig */,
 				DB5998989361F0AE361E45BD /* Pods-TrackerTests.debug.xcconfig */,
 				8760D39EF588808B6659DA18 /* Pods-TrackerTests.release.xcconfig */,
 			);
@@ -320,7 +315,6 @@
 			isa = PBXGroup;
 			children = (
 				63C791D34D5C6D6177C15CC3 /* Pods_Tracker.framework */,
-				CCD10C9F73B046EA0BCFB551 /* Pods_Tracker_TrackerUITests.framework */,
 				8F7731A8C8012584B974A675 /* Pods_TrackerTests.framework */,
 			);
 			name = Frameworks;

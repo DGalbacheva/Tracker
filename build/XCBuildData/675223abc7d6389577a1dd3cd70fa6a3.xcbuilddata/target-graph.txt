@@ -1,0 +1,8 @@
+Target dependency graph (4 targets)
+Target 'Pods-TrackerTests' in project 'Pods'
+➜ Explicit dependency on target 'Pods-Tracker' in project 'Pods'
+Target 'Pods-Tracker-TrackerUITests' in project 'Pods'
+➜ Explicit dependency on target 'YandexMobileMetrica' in project 'Pods'
+Target 'Pods-Tracker' in project 'Pods'
+➜ Explicit dependency on target 'YandexMobileMetrica' in project 'Pods'
+Target 'YandexMobileMetrica' in project 'Pods' (no dependencies)
