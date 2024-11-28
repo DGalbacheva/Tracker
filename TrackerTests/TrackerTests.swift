@@ -10,10 +10,6 @@ import SnapshotTesting
 @testable import Tracker
 
 final class TrackerTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        SnapshotTesting.isRecording = false
-    }
 
     func testTrackerViewControllerForEmptyState() {
         let testVC = TrackersViewController()
@@ -21,7 +17,7 @@ final class TrackerTests: XCTestCase {
         coreDataManager.trackerCategoryStore.removeAllTrackerCategory()
         coreDataManager.trackerStore.removeAllTrackers()
         coreDataManager.trackerRecordStore.removeAllTrackerRecords()
-        assertSnapshot(of: testVC, as: .image)
+        assertSnapshot(matching: testVC, as: .image)
     }
     
     func testTrackerViewControllerForNormalState() {
@@ -31,6 +27,6 @@ final class TrackerTests: XCTestCase {
         coreDataManager.trackerStore.removeAllTrackers()
         coreDataManager.trackerRecordStore.removeAllTrackerRecords()
         coreDataManager.trackerStore.addNewTracker(tracker: Tracker(id: UUID(), title: "Reading", color: .colorSet1, emoji: "🙌", schedule: [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]), categoryName: "Book")
-        assertSnapshot(of: testVC, as: .image)
+        assertSnapshot(matching: testVC, as: .image)
     }
 }
