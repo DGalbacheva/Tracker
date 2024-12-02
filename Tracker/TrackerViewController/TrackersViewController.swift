@@ -482,6 +482,12 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
             print("Error updating tracker state: \(error)")
         }
         
+        let categoryName = filteredTrackers[indexPath.section].title
+        let completionCount = trackerRecordStore.getTrackerRecords(by: tracker.id).count
+        let isCompletedToday = trackerRecordStore.isTrackerCompleted(trackerId: tracker.id, date: selectedDate)
+        cell.configure(id: tracker.id, title: tracker.title, color: tracker.color, emoji: tracker.emoji, completedDays: completionCount, isEnabled: true, isCompletedToday: isCompletedToday, indexPath: indexPath, categoryName: categoryName, weekDays: tracker.schedule)
+        collectionView.reloadItems(at: [indexPath])
+        
         delegate?.whatsShow(days: trackerRecordStore.getAllTrackerRecords().count)
         if let savedFilterRawValue = UserDefaults.standard.string(forKey: "pickedFilter"),
            let savedFilter = FiltersCases(rawValue: savedFilterRawValue) {
@@ -492,6 +498,7 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
     func confirmingDeletionAlert(alert: UIAlertController) {
         present(alert, animated: true)
     }
+    
 }
 
 //MARK: - CoreDataManagerDelegate

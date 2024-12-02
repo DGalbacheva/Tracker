@@ -28,6 +28,7 @@ final class TrackerRecordStore {
         let trackerRecord = TrackerRecordCD(context: context)
         trackerRecord.trackerId = trackerId
         trackerRecord.date = Calendar.current.startOfDay(for: date)
+        
         try context.save()
     }
     
@@ -47,7 +48,7 @@ final class TrackerRecordStore {
             print("Failed to delete tracker entry: \(error)")
         }
     }
-    
+
     func getTrackerRecords(by trackerId: UUID) -> [TrackerRecord] {
         let fetchRequest = fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "trackerId == %@", trackerId as CVarArg)
