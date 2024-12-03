@@ -7,17 +7,14 @@
 
 import UIKit
 
-protocol HabitOrEventViewControllerDelegate: AnyObject {
-    func didCreateTracker(category: String, tracker: Tracker)
-}
-
 final class HabitOrEventViewController: UIViewController {
     enum TrackerType {
         case habit
         case event
     }
     
-    weak var delegate: HabitOrEventViewControllerDelegate?
+    private let trackerStore = TrackerStore()
+    
     var trackerType: TrackerType = .habit
     var weekDaysArrayForTracker: [WeekDay] = []
     var textFieldIsEmpty: Bool = true
@@ -79,6 +76,7 @@ final class HabitOrEventViewController: UIViewController {
         nameTrackerTextField.leftViewMode = .always
         nameTrackerTextField.clearButtonMode = .whileEditing
         nameTrackerTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+        nameTrackerTextField.delegate = self
         
         trackerTableView.register(HabitOrEventTableViewСеll.self, forCellReuseIdentifier: HabitOrEventTableViewСеll.identifier)
         trackerTableView.separatorStyle = .singleLine
@@ -188,7 +186,7 @@ final class HabitOrEventViewController: UIViewController {
     }
     
     @objc private func createButtonIsClicked() {
-        dismiss(animated: true)
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
         guard let color = trackerColor, let emoji = trackerEmoji else { return }
         var tracker: Tracker
         if let text = nameTrackerTextField.text {
@@ -198,7 +196,7 @@ final class HabitOrEventViewController: UIViewController {
                 weekDaysArrayForTracker = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
                 tracker = Tracker(id: UUID(), title: text, color: color, emoji: emoji, schedule: weekDaysArrayForTracker)
             }
-            delegate?.didCreateTracker(category: categoryForTracker, tracker: tracker)
+            trackerStore.addNewTracker(tracker: tracker, categoryName: categoryForTracker)
         }
     }
     
@@ -213,11 +211,21 @@ final class HabitOrEventViewController: UIViewController {
     }
 }
 
+//MARK: UITextFieldDelegate
+extension HabitOrEventViewController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+}
+
 extension HabitOrEventViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let viewController = CategoryViewController()
-            viewController.delegateForHabit = self
+            let viewModel = CategoryViewModel()
+            viewModel.delegate = self
+            let viewController = CategoryViewController(categoryViewModel: viewModel)
             present(viewController, animated: true)
         } else if trackerType == .habit && indexPath.row == 1 {
             let viewController = ScheduleViewController()
@@ -360,7 +368,7 @@ extension HabitOrEventViewController: UICollectionViewDelegate {
             if let cell = collectionView.cellForItem(at: indexPath) as? HabitOrEventCollectionViewCell {
                 cell.selectEmoji()
             }
-        } else {
+        } else if indexPath.section == 1 {
             if let selectedColorIndexPath = selectedColorIndexPath, let previousCell = collectionView.cellForItem(at: selectedColorIndexPath) as? HabitOrEventCollectionViewCell {
                 previousCell.deselectColor()
             }
@@ -373,20 +381,10 @@ extension HabitOrEventViewController: UICollectionViewDelegate {
         }
         updateCreateButtonState()
     }
-
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? HabitOrEventCollectionViewCell else {return}
-        if indexPath.section == 0 {
-            cell.deselectEmoji()
-        } else {
-            cell.deselectColor()
-        }
-        updateCreateButtonState()
-    }
 }
 
-extension HabitOrEventViewController: CategoryViewControllerDelegateForHabit {
-    func categoryIsPicket(category: String) {
+extension HabitOrEventViewController: CategoryViewModelDelegate {
+    func categoryIsPicked(category: String) {
         categoryForTracker = category
         trackerTableView.reloadData()
         updateCreateButtonState()

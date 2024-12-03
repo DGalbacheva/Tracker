@@ -12,7 +12,7 @@ protocol TrackerTypeSelectionViewControllerDelegate: AnyObject {
 }
 
 final class TrackerTypeSelectionViewController: UIViewController {
-    weak var delegate: TrackerTypeSelectionViewControllerDelegate?
+   // weak var delegate: TrackerTypeSelectionViewControllerDelegate?
     private lazy var titleLabel = UILabel()
     private lazy var habitButton = UIButton()
     private lazy var eventButton = UIButton()
@@ -75,21 +75,12 @@ final class TrackerTypeSelectionViewController: UIViewController {
     @objc private func habitButtonPress() {
         let viewController = HabitOrEventViewController()
         viewController.trackerType = .habit
-        viewController.delegate = self
         present(viewController, animated: true)
     }
 
     @objc private func eventButtonPress() {
         let viewController = HabitOrEventViewController()
         viewController.trackerType = .event
-        viewController.delegate = self
         present(viewController, animated: true)
-    }
-}
-
-extension TrackerTypeSelectionViewController: HabitOrEventViewControllerDelegate {
-    func didCreateTracker(category: String, tracker: Tracker) {
-        delegate?.addNewTracker(category: category, tracker: tracker)
-        dismiss(animated: true)
     }
 }

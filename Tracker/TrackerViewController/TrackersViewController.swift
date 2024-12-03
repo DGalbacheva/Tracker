@@ -49,10 +49,6 @@ final class TrackersViewController: UIViewController {
         coreDataManager.configureFetchedResultsController(for: WeekDay.fromDate(selectedDate))
         showOrHideCollection()
         
-        trackerStore.removeAllTrackers()
-        trackerRecordStore.removeAllTrackerRecords()
-        trackerCategoryStore.removeAllTrackerCategory()
-        
         addSubViews()
     }
     
@@ -105,7 +101,7 @@ final class TrackersViewController: UIViewController {
         searchTextField.leftViewMode = .unlessEditing
         searchTextField.leftViewMode = .always
         searchTextField.clearButtonMode = .whileEditing
-        
+        searchTextField.delegate = self
         
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(searchTextField)
@@ -183,7 +179,6 @@ final class TrackersViewController: UIViewController {
     //Set the click on the + button in the navbar
     @objc private func addButtonTapped() {
         let modalVC = TrackerTypeSelectionViewController()
-        modalVC.delegate = self
         present(modalVC, animated: true)
         
     }
@@ -223,14 +218,10 @@ final class TrackersViewController: UIViewController {
 
 //MARK: - UITextFieldDelegate
 
-//Extension for correct operation of the search bar
 extension TrackersViewController: UITextFieldDelegate {
-    
-    //A method that works on the Done button and returns the result
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder() //hides textfield
-        
-        return true //Returning the action (you can cancel it, but this is not necessary now)
+        self.view.endEditing(true)
+        return false
     }
 }
 
@@ -360,13 +351,7 @@ extension TrackersViewController: TrackerCollectionViewCellDelegate {
     }
 }
 
-//MARK: - TrackerTypeSelectionViewControllerDelegate
-
-extension TrackersViewController: TrackerTypeSelectionViewControllerDelegate {
-    func addNewTracker(category: String, tracker: Tracker) {
-        trackerStore.addNewTracker(tracker: tracker, categoryName: category)
-    }
-}
+//MARK: - CoreDataManagerDelegate
 
 extension TrackersViewController: CoreDataManagerDelegate {
     func didChangeData(_ data: [TrackerCategory]) {
@@ -375,3 +360,5 @@ extension TrackersViewController: CoreDataManagerDelegate {
         collectionView.reloadData()
     }
 }
+
+
