@@ -7,7 +7,6 @@
 
 import UIKit
 
-//Create a class for the section header
 final class SectionHeader: UICollectionReusableView {
     lazy var titleLabel = UILabel()
 

@@ -8,13 +8,10 @@
 import Foundation
 
 final class DataManager {
-    // Создаем синглтон
     static let shared = DataManager()
     
-    // Приватный инициализатор, чтобы предотвратить создание более одного экземпляра
     private init() {}
     
-    // Массив с моковыми данными
     var mockTrackers: [TrackerCategory] = [
         TrackerCategory(title: "Домашний уют", trackers:
                             [Tracker(id: UUID(),  title: "Поливать растения", color: .colorSet5, emoji: "❤️", schedule: [.monday])]),

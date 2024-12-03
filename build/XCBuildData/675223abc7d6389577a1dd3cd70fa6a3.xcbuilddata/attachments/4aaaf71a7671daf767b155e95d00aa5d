@@ -1,0 +1,5 @@
+ extern const unsigned char Pods_Tracker_TrackerUITestsVersionString[];
+ extern const double Pods_Tracker_TrackerUITestsVersionNumber;
+
+ const unsigned char Pods_Tracker_TrackerUITestsVersionString[] __attribute__ ((used)) = "@(#)PROGRAM:Pods_Tracker_TrackerUITests  PROJECT:Pods-1" "\n";
+ const double Pods_Tracker_TrackerUITestsVersionNumber __attribute__ ((used)) = (double)1.;

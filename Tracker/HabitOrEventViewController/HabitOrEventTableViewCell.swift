@@ -9,15 +9,25 @@ import UIKit
 
 final class HabitOrEventTableViewСеll: UITableViewCell {
     
+    //MARK: - Properties
+    
     static let identifier = "HabitOrEventTableViewСеll"
     
     private lazy var chevronImg: UIImageView = {
         return UIImageView(image: UIImage(named: "chevron"))
     }()
     private lazy var nameLable = UILabel()
-    private lazy var descriptionLable = UILabel()
+    private lazy var descriptionLabel = UILabel()
+    private var descriptionLabelTopConstraint: NSLayoutConstraint!
+    private var nameLabelCenterYConstraint: NSLayoutConstraint!
     
+    var descriptionLabelIsEmpty = false {
+        didSet {
+            updateConstraintsForDescriptionLabel()
+        }
+    }
     
+    //MARK: - Lifecycle Methods
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
@@ -28,23 +38,28 @@ final class HabitOrEventTableViewСеll: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureSubviews() {
+    //MARK: - UI Setup Methods
+    
+    private func configureSubviews() {
         nameLable.font = .systemFont(ofSize: 17, weight: .regular)
         nameLable.textColor = .blackDay
         
-        descriptionLable.font = .systemFont(ofSize: 17, weight: .regular)
-        descriptionLable.textColor = .ypGray
+        descriptionLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        descriptionLabel.textColor = .ypGray
         
-        descriptionLable.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLable.translatesAutoresizingMaskIntoConstraints = false
         chevronImg.translatesAutoresizingMaskIntoConstraints = false
         
-        contentView.addSubview(descriptionLable)
+        contentView.addSubview(descriptionLabel)
         contentView.addSubview(chevronImg)
         contentView.addSubview(nameLable)
         
         let heightCell = contentView.heightAnchor.constraint(equalToConstant: 75)
         heightCell.priority = .defaultHigh
+        
+        nameLabelCenterYConstraint = nameLable.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        descriptionLabelTopConstraint = descriptionLabel.topAnchor.constraint(equalTo: nameLable.bottomAnchor, constant: 4)
         
         NSLayoutConstraint.activate([
             heightCell,
@@ -54,26 +69,38 @@ final class HabitOrEventTableViewСеll: UITableViewCell {
             chevronImg.widthAnchor.constraint(equalToConstant: 24),
             
             nameLable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameLable.heightAnchor.constraint(equalToConstant: 24),
             nameLable.trailingAnchor.constraint(equalTo: chevronImg.leadingAnchor),
             nameLable.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
             
-            descriptionLable.leadingAnchor.constraint(equalTo: nameLable.leadingAnchor),
-            descriptionLable.topAnchor.constraint(equalTo: nameLable.bottomAnchor),
-            descriptionLable.trailingAnchor.constraint(equalTo: nameLable.trailingAnchor),
-            descriptionLable.heightAnchor.constraint(equalToConstant: 22)
+            descriptionLabel.leadingAnchor.constraint(equalTo: nameLable.leadingAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: nameLable.trailingAnchor),
+            descriptionLabel.heightAnchor.constraint(equalToConstant: 22)
         ])
+        
+        updateConstraintsForDescriptionLabel()
+    }
+    
+    private func updateConstraintsForDescriptionLabel() {
+        if descriptionLabelIsEmpty {
+            descriptionLabel.isHidden = true
+            descriptionLabelTopConstraint.isActive = false
+            nameLabelCenterYConstraint.isActive = true
+        } else {
+            descriptionLabel.isHidden = false
+            nameLabelCenterYConstraint.isActive = false
+            descriptionLabelTopConstraint.isActive = true
+        }
     }
     
     func configureNameLable(textNameLable: String) {
         nameLable.text = textNameLable
     }
     
-    func configureDescriptionLable(textDescriptionLable: String) {
-        var text = textDescriptionLable
+    func configureDescriptionLabel(textDescriptionLabel: String) {
+        var text = textDescriptionLabel
         if text.last == "," {
             text.removeLast()
         }
-        descriptionLable.text = text
+        descriptionLabel.text = text
     }
 }
